@@ -1,76 +1,125 @@
 import { useState, useRef } from 'react';
-import { Terminal, Layout, Server, Cpu, Database, Wrench, CheckCircle2, ArrowUpRight, Sparkles } from 'lucide-react';
+import { 
+  GraduationCap, 
+  MapPin, 
+  Code2, 
+  Star, 
+  Award, 
+  Briefcase, 
+  ChevronDown,
+  Sparkles,
+  Layers
+} from 'lucide-react';
 import { useCornerConvergence } from '../motion/scrollMotion';
 
-interface SkillDomain {
-  num: string;
-  title: string;
+interface SkillItem {
+  id: string;
+  name: string;
+  percentage: number;
+  highlight?: boolean;
   category: string;
-  icon: typeof Terminal;
-  technologies: string[];
-  summary: string;
-  projectProof: string;
+  frameworks: string[];
+  description: string;
+  appliedIn: string;
 }
 
-const SKILL_DOMAINS: SkillDomain[] = [
+const SKILLS_DATA: SkillItem[] = [
   {
-    num: '01',
-    title: 'Programming Languages',
-    category: 'Core Systems & Algorithms',
-    icon: Terminal,
-    technologies: ['Python', 'Java', 'C', 'JavaScript', 'SQL'],
-    summary: 'Algorithmic efficiency, OOP design patterns, and memory-conscious data structures across diverse runtimes.',
-    projectProof: 'SecureBank Core Java Engine & Microscopy Firmware',
+    id: 'python-ml',
+    name: 'Python & Machine Learning',
+    percentage: 92,
+    highlight: true,
+    category: 'Applied AI & Modeling',
+    frameworks: ['TensorFlow', 'Scikit-learn', 'CatBoost', 'NumPy', 'Pandas'],
+    description: 'Predictive modeling, regression ensembles, and automated crop recommendation pipelines.',
+    appliedIn: 'AgriSense AI Soil Health (Infosys Springboard) & ML Benchmarking'
   },
   {
-    num: '02',
-    title: 'Frontend Engineering',
-    category: 'Interfaces & Responsive Motion',
-    icon: Layout,
-    technologies: ['React.js', 'TypeScript', 'Tailwind CSS', 'HTML5', 'CSS3'],
-    summary: 'Modern component-driven web architectures, responsive design systems, and hardware-accelerated animations.',
-    projectProof: 'ApexStore MERN Platform & BloodConnect Live UI',
+    id: 'dsa',
+    name: 'Data Structures & Algorithms (DSA)',
+    percentage: 88,
+    category: 'Core Computer Science',
+    frameworks: ['Trees & Graphs', 'Dynamic Programming', 'Sliding Window', 'HashMaps', 'Time/Space Optimization'],
+    description: 'Algorithmic efficiency, Big-O complexity minimization, and clean OOP problem-solving.',
+    appliedIn: 'SecureBank Core Engine & Competitive Code Sandboxes'
   },
   {
-    num: '03',
-    title: 'Backend & Microservices',
+    id: 'react-fullstack',
+    name: 'React.js & Full-Stack Web (MERN / Vite)',
+    percentage: 90,
+    highlight: true,
+    category: 'Interactive Web Interfaces',
+    frameworks: ['React 18', 'TypeScript', 'Tailwind CSS', 'Redux / Zustand', 'Vite'],
+    description: 'Component architecture, reactive client state, Lenis smooth motion, and responsive UX.',
+    appliedIn: 'ApexStore E-Commerce, BloodConnect Live & Portfolio'
+  },
+  {
+    id: 'java-oop',
+    name: 'Java & Object-Oriented Programming (OOP)',
+    percentage: 85,
+    category: 'Enterprise Backend',
+    frameworks: ['Core Java 17+', 'Multithreading', 'JDBC', 'Design Patterns (Factory, Singleton)', 'Maven'],
+    description: 'Thread-safe concurrency, memory management, strict type isolation, and ACID persistence.',
+    appliedIn: 'SecureBank Java Banking System'
+  },
+  {
+    id: 'fastapi-rest',
+    name: 'FastAPI, Flask & REST APIs',
+    percentage: 88,
     category: 'High-Throughput Services',
-    icon: Server,
-    technologies: ['FastAPI', 'Node.js', 'Express', 'REST APIs', 'Celery'],
-    summary: 'Asynchronous event loops, RESTful microservices, Server-Sent Events (SSE) streaming, and worker task queues.',
-    projectProof: 'RoadSoS Emergency Cloud Triage & SmartAttend APIs',
+    frameworks: ['FastAPI', 'Pydantic v2', 'Uvicorn', 'SSE Streaming', 'JWT Auth'],
+    description: 'Asynchronous non-blocking endpoints, strict JSON validation schemas, and real-time streams.',
+    appliedIn: 'RoadSoS Cloud Triage & SmartAttend Campus Backend'
   },
   {
-    num: '04',
-    title: 'Artificial Intelligence & ML',
-    category: 'Deep Vision & Vector RAG',
-    icon: Cpu,
-    technologies: ['TensorFlow', 'EfficientNetB2', 'CatBoost', 'Scikit-learn', 'RAG'],
-    summary: 'Convolutional vision backbones, gradient boosted decision trees for multi-target classification, and RAG pipelines.',
-    projectProof: 'AgriSense Soil Health (Infosys) & Amazon RAG (Samsung AI)',
+    id: 'dl-cv',
+    name: 'Deep Learning & Computer Vision (YOLOv8 / CNNs)',
+    percentage: 86,
+    highlight: true,
+    category: 'Computer Vision & Deep Nets',
+    frameworks: ['EfficientNetB2', 'YOLOv8', 'OpenCV', 'PyTorch Inference', 'Transfer Learning'],
+    description: 'Convolutional feature extraction, real-time object tracking, and vector embeddings.',
+    appliedIn: 'Samsung Innovation Campus AI & Automated Microscopy System (Patent)'
   },
   {
-    num: '05',
-    title: 'Database & Persistence',
-    category: 'ACID Concurrency & Modeling',
-    icon: Database,
-    technologies: ['MySQL', 'MongoDB', 'SQLAlchemy', 'Prisma ORM'],
-    summary: 'ACID transaction locks, foreign key normalization, high-throughput document stores, and declarative ORMs.',
-    projectProof: 'SecureBank Row-Level Locks & BloodConnect Prisma',
+    id: 'cloud-db',
+    name: 'Cloud & Databases (MySQL, MongoDB, PostgreSQL)',
+    percentage: 82,
+    category: 'Data Persistence',
+    frameworks: ['MySQL 8.0', 'MongoDB Atlas', 'PostgreSQL', 'SQLAlchemy', 'Redis Caching'],
+    description: 'Relational schema normalization, compound indexing, query profiling, and ACID transactions.',
+    appliedIn: 'BloodConnect Geo-Spatial Queries & ApexStore Catalog'
   },
   {
-    num: '06',
-    title: 'Tools, DevOps & Hardware',
-    category: 'Containerization & Firmware',
-    icon: Wrench,
-    technologies: ['Git', 'GitHub', 'Docker', 'Postman', 'Embedded C'],
-    summary: 'Branch-based Git workflows, reproducible Docker containers, contract-first API testing suites, and IoT microcontroller firmware.',
-    projectProof: 'Indian Patent Publication (202641064539 A) & Docker Pipelines',
-  },
+    id: 'devops-tools',
+    name: 'Docker, Git & Modern DevOps',
+    percentage: 80,
+    category: 'Infrastructure & Tooling',
+    frameworks: ['Docker', 'Git / GitHub', 'Postman', 'Linux / Bash', 'Vercel CI/CD'],
+    description: 'Reproducible container images, branch-based CI/CD pipelines, and microservice orchestration.',
+    appliedIn: 'Multi-container deployment pipelines across all 9 GitHub repositories'
+  }
+];
+
+const QUICK_TAGS = [
+  'Python',
+  'Java',
+  'C / C++',
+  'React.js',
+  'FastAPI',
+  'Node.js',
+  'TypeScript',
+  'DSA & OOP',
+  'Computer Vision (YOLOv8)',
+  'Docker',
+  'MySQL & MongoDB',
+  'Git & GitHub',
+  'Tailwind CSS'
 ];
 
 export const SkillsSection = () => {
-  const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
+  const [hoveredSkill, setHoveredSkill] = useState<string | null>(null);
+  const [expandedSkill, setExpandedSkill] = useState<string | null>('python-ml');
 
   const sectionRef = useRef<HTMLElement | null>(null);
   const headingRef = useRef<HTMLDivElement | null>(null);
@@ -86,165 +135,242 @@ export const SkillsSection = () => {
     <section
       id="skills"
       ref={sectionRef}
-      className="relative py-28 sm:py-36 px-6 sm:px-12 lg:px-16 border-t border-border-light dark:border-border-dark bg-canvas-light dark:bg-[#0C0D11] text-text-black dark:text-white transition-colors duration-300 overflow-hidden"
+      className="relative py-28 sm:py-36 px-6 sm:px-12 lg:px-16 border-t border-border-dark bg-[#0C0D11] text-white transition-colors duration-300 overflow-hidden"
     >
-      {/* Background ambient lighting */}
-      <div className="absolute top-1/4 right-1/4 w-[550px] h-[550px] bg-cobalt/5 dark:bg-cobalt/10 rounded-full blur-[180px] pointer-events-none" />
+      {/* Background ambient lighting and starfield glow */}
+      <div className="absolute top-1/3 left-1/4 w-[500px] h-[500px] bg-cobalt/10 rounded-full blur-[180px] pointer-events-none" />
+      <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-purple-600/10 rounded-full blur-[180px] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto space-y-16 relative z-10">
         
-        {/* Section Header */}
-        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 pb-6 border-b border-border-light dark:border-border-dark">
-          <div ref={headingRef} className="space-y-4 max-w-2xl">
-            <div className="flex items-center gap-2 text-xs font-mono tracking-widest text-text-dimmed dark:text-text-muted uppercase">
-              <span className="w-2 h-2 rounded-full bg-cobalt inline-block animate-pulse" />
-              <span>04 // TECHNICAL EXPERTISE &amp; STACK</span>
+        {/* Section kicker */}
+        <div className="flex items-center justify-between pb-4 border-b border-border-dark">
+          <div className="flex items-center gap-2 text-xs font-mono tracking-widest text-cobalt-light uppercase">
+            <span className="w-2 h-2 rounded-full bg-cobalt inline-block animate-pulse" />
+            <span>03 // TECHNICAL EXPERTISE &amp; PROFICIENCY</span>
+          </div>
+          <div className="hidden sm:flex items-center gap-2 text-[11px] font-mono text-text-muted">
+            <Sparkles size={13} className="text-acid-lime" />
+            <span>HOVER ANY SKILL BAR TO ELABORATE DETAILS</span>
+          </div>
+        </div>
+
+        {/* =============================================================== */}
+        {/* TWO-COLUMN REFERENCE UI LAYOUT                                  */}
+        {/* =============================================================== */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+          
+          {/* ============================================================= */}
+          {/* LEFT COLUMN: Narrative & Academic / Industry Badges           */}
+          {/* ============================================================= */}
+          <div className="lg:col-span-5 space-y-8">
+            
+            <div ref={headingRef} className="space-y-4">
+              <span className="text-xs font-mono tracking-widest uppercase text-cyan-400 font-semibold block">
+                — ABOUT MY CRAFT
+              </span>
+
+              <h2 className="font-display font-black text-4xl sm:text-5xl lg:text-[56px] tracking-tight text-white leading-[1.06]">
+                Crafting Code &amp;{' '}
+                <span className="block text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-cobalt-light to-purple-400">
+                  Intelligent Systems
+                </span>
+              </h2>
             </div>
 
-            <h2 className="font-display font-black text-4xl sm:text-6xl lg:text-[68px] tracking-tight leading-[1.02] uppercase">
-              Skills &amp;{' '}
-              <span className="text-cobalt dark:text-cobalt-light block sm:inline">
-                Capabilities.
+            <div ref={textRef} className="space-y-4 font-sans text-sm sm:text-base text-gray-300 leading-relaxed font-light">
+              <p>
+                I'm <span className="font-semibold text-white">ARJUNAN</span>, a passionate{' '}
+                <span className="font-semibold text-cyan-300">B.Tech Information Technology</span> student at{' '}
+                <span className="text-white">KPR Institute of Engineering and Technology, Coimbatore</span>, with a strong CGPA of{' '}
+                <span className="font-mono font-bold text-acid-lime">8.42</span>.
+              </p>
+
+              <p>
+                I thrive at the intersection of <span className="text-white font-medium">AI/ML</span>,{' '}
+                <span className="text-white font-medium">full-stack development</span>, and resilient systems design. 
+                I've completed a Python Developer internship at{' '}
+                <span className="text-cobalt-light font-medium">Infosys Springboard</span>, earned the{' '}
+                <span className="text-purple-400 font-medium">Samsung Innovation Campus</span> credential in{' '}
+                <span className="text-white font-semibold">Artificial Intelligence</span>, and published an Indian Patent in automated smart systems.
+              </p>
+
+              <p className="text-xs sm:text-sm text-gray-400">
+                When I'm not training models or architecting backend services, I build low-latency APIs, explore modern cloud pipelines, and craft high-performance interactive interfaces.
+              </p>
+            </div>
+
+            {/* Badges Matrix (Reference Style) */}
+            <div className="flex flex-wrap gap-2.5 pt-2">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs font-sans text-gray-200">
+                <GraduationCap size={13} className="text-cyan-400" />
+                <span>KPR Institute, Coimbatore</span>
+              </div>
+
+              <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs font-sans text-gray-200">
+                <MapPin size={13} className="text-cobalt-light" />
+                <span>Coimbatore, TN</span>
+              </div>
+
+              <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs font-mono text-cyan-300">
+                <Code2 size={13} />
+                <span>&lt;/&gt; Full-Stack + ML</span>
+              </div>
+
+              <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs font-mono text-acid-lime font-bold">
+                <Star size={13} />
+                <span>CGPA 8.42</span>
+              </div>
+
+              <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs font-sans text-amber-300">
+                <Award size={13} />
+                <span>Published Patent (IPO)</span>
+              </div>
+
+              <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs font-sans text-purple-300">
+                <Award size={13} />
+                <span>Hostel Hackathon Winner</span>
+              </div>
+
+              <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 border border-purple-500/30 text-xs font-sans text-purple-200">
+                <Award size={13} className="text-purple-400" />
+                <span>Samsung Innovation Campus (AI)</span>
+              </div>
+
+              <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-acid-lime/10 border border-acid-lime/30 text-xs font-sans text-acid-lime font-medium">
+                <Briefcase size={13} />
+                <span>Open to Software Roles &amp; Internships</span>
+              </div>
+            </div>
+
+          </div>
+
+          {/* ============================================================= */}
+          {/* RIGHT COLUMN: Skill Progress Bars + Hover Elaborations        */}
+          {/* ============================================================= */}
+          <div className="lg:col-span-7 space-y-6 bg-[#14161E]/70 p-6 sm:p-10 rounded-3xl border border-border-dark backdrop-blur-sm shadow-xl">
+            
+            <div className="flex items-center justify-between pb-3 border-b border-white/10">
+              <span className="font-mono text-xs text-text-muted uppercase tracking-wider">
+                DOMAIN COMPETENCIES &amp; BENCHMARKS
               </span>
-            </h2>
+              <span className="font-mono text-xs text-cyan-400">
+                08 TRACKED DOMAINS
+              </span>
+            </div>
 
-            <p ref={textRef} className="font-sans text-base sm:text-lg text-text-dimmed dark:text-text-muted font-light leading-relaxed">
-              "From intelligent systems to scalable applications, I enjoy engineering across different layers of technology."
-            </p>
-          </div>
+            {/* List of Skill Bars */}
+            <div className="space-y-4">
+              {SKILLS_DATA.map((skill) => {
+                const isHovered = hoveredSkill === skill.id;
+                const isExpanded = isHovered || expandedSkill === skill.id;
 
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="px-3.5 py-1.5 rounded-full bg-cobalt/10 border border-cobalt/20 text-xs font-mono text-cobalt dark:text-cobalt-light font-bold flex items-center gap-1.5">
-              <Sparkles size={12} className="text-acid-lime" />
-              <span>06 CORE DOMAINS</span>
-            </span>
-            <span className="px-3.5 py-1.5 rounded-full bg-white dark:bg-white/5 border border-border-light dark:border-border-dark text-xs font-mono text-text-dimmed dark:text-text-muted">
-              HOVER TO ELABORATE
-            </span>
-          </div>
-        </div>
-
-        {/* Brand New Simple Bento Grid (6 Domain Cards) */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-          {SKILL_DOMAINS.map((domain, idx) => {
-            const Icon = domain.icon;
-            const isHovered = hoveredIdx === idx;
-
-            return (
-              <div
-                key={domain.num}
-                onMouseEnter={() => setHoveredIdx(idx)}
-                onMouseLeave={() => setHoveredIdx(null)}
-                className={`group flex flex-col justify-between p-7 sm:p-8 rounded-3xl bg-white dark:bg-[#14161E] border transition-all duration-300 shadow-subtle-card cursor-pointer relative overflow-hidden ${
-                  isHovered
-                    ? 'border-cobalt dark:border-cobalt shadow-cobalt-glow/20 -translate-y-1.5'
-                    : 'border-border-light dark:border-border-dark hover:border-cobalt/60'
-                }`}
-              >
-                {/* Subtle top-right accent glow on hover */}
-                <div
-                  className={`absolute -top-16 -right-16 w-32 h-32 rounded-full bg-cobalt/15 blur-2xl transition-opacity duration-300 pointer-events-none ${
-                    isHovered ? 'opacity-100' : 'opacity-0'
-                  }`}
-                />
-
-                <div className="space-y-6 relative z-10">
-                  {/* Card Header: Number, Icon, and Arrow */}
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <div
-                        className={`w-10 h-10 rounded-2xl flex items-center justify-center transition-colors duration-300 ${
-                          isHovered
-                            ? 'bg-cobalt text-white shadow-sm'
-                            : 'bg-cobalt/10 text-cobalt dark:text-cobalt-light'
-                        }`}
-                      >
-                        <Icon size={18} />
-                      </div>
-                      <span className="font-mono text-xs font-bold text-cobalt dark:text-cobalt-light">
-                        {domain.num} // {domain.category}
-                      </span>
-                    </div>
-
-                    <div
-                      className={`w-7 h-7 rounded-full border flex items-center justify-center transition-all duration-300 ${
-                        isHovered
-                          ? 'border-cobalt bg-cobalt text-white rotate-45 scale-110 shadow-sm'
-                          : 'border-border-light dark:border-white/10 text-text-dimmed/40 group-hover:border-cobalt group-hover:text-cobalt'
-                      }`}
-                    >
-                      <ArrowUpRight size={13} />
-                    </div>
-                  </div>
-
-                  {/* Domain Title */}
-                  <div>
-                    <h3
-                      className={`font-display font-bold text-xl sm:text-2xl tracking-tight transition-colors duration-200 ${
-                        isHovered
-                          ? 'text-cobalt dark:text-cobalt-light'
-                          : 'text-text-black dark:text-white'
-                      }`}
-                    >
-                      {domain.title}
-                    </h3>
-                    <p className="font-sans text-xs sm:text-sm text-text-dimmed dark:text-gray-300 font-light leading-relaxed mt-2">
-                      {domain.summary}
-                    </p>
-                  </div>
-
-                  {/* Technologies Tags */}
-                  <div className="flex flex-wrap gap-1.5 pt-1">
-                    {domain.technologies.map((tech) => (
-                      <span
-                        key={tech}
-                        className={`px-2.5 py-1 rounded-lg text-xs font-mono transition-all duration-200 ${
-                          isHovered
-                            ? 'bg-cobalt/15 text-cobalt dark:text-cobalt-light border border-cobalt/35 font-medium'
-                            : 'bg-canvas-light dark:bg-white/5 border border-border-light dark:border-white/10 text-text-dimmed dark:text-gray-300'
-                        }`}
-                      >
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Footer: Verified Project Proof */}
-                <div className="pt-6 mt-6 border-t border-border-light dark:border-border-dark/60 flex items-center justify-between text-xs font-mono relative z-10">
-                  <div className="flex items-center gap-1.5 text-text-dimmed dark:text-gray-400">
-                    <CheckCircle2
-                      size={13}
-                      className={isHovered ? 'text-acid-lime' : 'text-cobalt dark:text-cobalt-light'}
-                    />
-                    <span className="truncate max-w-[200px] sm:max-w-[220px]">
-                      {domain.projectProof}
-                    </span>
-                  </div>
-                  <span
-                    className={`font-bold transition-colors ${
-                      isHovered ? 'text-acid-lime' : 'text-text-dimmed dark:text-text-muted'
+                return (
+                  <div
+                    key={skill.id}
+                    onMouseEnter={() => {
+                      setHoveredSkill(skill.id);
+                      setExpandedSkill(skill.id);
+                    }}
+                    onMouseLeave={() => setHoveredSkill(null)}
+                    className={`p-3.5 sm:p-4 rounded-2xl transition-all duration-300 cursor-pointer ${
+                      isExpanded
+                        ? 'bg-white/10 border border-cyan-400/40 shadow-lg shadow-cyan-500/5'
+                        : 'bg-white/5 border border-white/5 hover:border-white/20'
                     }`}
                   >
-                    VERIFIED
-                  </span>
-                </div>
-              </div>
-            );
-          })}
-        </div>
+                    {/* Header: Name and Percentage */}
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="flex items-center gap-2">
+                        <span className="font-sans text-sm sm:text-base font-medium text-white group-hover:text-cyan-300 transition-colors">
+                          {skill.name}
+                        </span>
+                        {skill.highlight && (
+                          <span className="px-1.5 py-0.5 rounded text-[9px] font-mono uppercase bg-cobalt/40 text-cyan-300 border border-cobalt/50">
+                            Core
+                          </span>
+                        )}
+                      </div>
 
-        {/* Editorial Bottom Bar */}
-        <div className="pt-8 border-t border-border-light dark:border-border-dark flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs font-mono text-text-dimmed dark:text-text-muted">
-          <div className="flex items-center gap-3">
-            <span className="inline-block w-2 h-2 rounded-full bg-acid-lime animate-pulse" />
-            <span>All skills validated through working codebases, production deployments &amp; published patent research.</span>
+                      <div className="flex items-center gap-2">
+                        <span className="font-mono font-bold text-xs sm:text-sm text-cyan-400">
+                          {skill.percentage}%
+                        </span>
+                        <ChevronDown
+                          size={14}
+                          className={`text-gray-400 transition-transform duration-300 ${
+                            isExpanded ? 'rotate-180 text-cyan-400' : ''
+                          }`}
+                        />
+                      </div>
+                    </div>
+
+                    {/* Glowing Progress Bar Track */}
+                    <div className="relative w-full h-2 bg-white/10 rounded-full overflow-hidden">
+                      <div
+                        className="h-full rounded-full bg-gradient-to-r from-[#00E5FF] via-[#3B82F6] to-[#A855F7] transition-all duration-700 ease-out relative"
+                        style={{ width: `${skill.percentage}%` }}
+                      >
+                        {/* Glowing Dot Indicator on hover / active */}
+                        {isExpanded && (
+                          <span className="absolute right-0 top-1/2 -translate-y-1/2 w-3.5 h-3.5 rounded-full bg-cyan-200 border-2 border-white shadow-[0_0_12px_#00E5FF] -mr-1 animate-pulse" />
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Expanded Detail Panel (Revealed on Hover for Better Understanding) */}
+                    {isExpanded && (
+                      <div className="mt-3 pt-3 border-t border-white/10 space-y-2 animate-fadeIn text-xs">
+                        <p className="text-gray-300 font-sans leading-relaxed">
+                          {skill.description}
+                        </p>
+
+                        <div className="flex flex-wrap items-center gap-1.5 pt-1">
+                          <span className="text-[10px] font-mono text-gray-400 uppercase tracking-wider mr-1">
+                            Stack:
+                          </span>
+                          {skill.frameworks.map((fw) => (
+                            <span
+                              key={fw}
+                              className="px-2 py-0.5 rounded text-[10px] font-mono bg-cyan-950/60 text-cyan-300 border border-cyan-800/40"
+                            >
+                              {fw}
+                            </span>
+                          ))}
+                        </div>
+
+                        <div className="flex items-center gap-1.5 pt-1 text-[11px] font-mono text-text-muted">
+                          <Layers size={11} className="text-purple-400" />
+                          <span>Applied in: <strong className="text-gray-200">{skill.appliedIn}</strong></span>
+                        </div>
+                      </div>
+                    )}
+
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Quick Tech Tags Pill Cluster (Reference Style) */}
+            <div className="pt-4 border-t border-white/10 space-y-3">
+              <span className="font-mono text-[11px] text-gray-400 uppercase tracking-wider block">
+                PRIMARY TOOLSET &amp; RUNTIMES:
+              </span>
+
+              <div className="flex flex-wrap gap-2">
+                {QUICK_TAGS.map((tag) => (
+                  <span
+                    key={tag}
+                    className="px-3 py-1 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 hover:border-cyan-400/50 text-xs font-mono text-gray-200 transition-colors"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+
           </div>
-          <div className="flex items-center gap-4">
-            <span>KPR Institute • IT Dept</span>
-            <span>•</span>
-            <span className="text-cobalt dark:text-cobalt-light font-bold">CGPA 8.42</span>
-          </div>
+
         </div>
 
       </div>

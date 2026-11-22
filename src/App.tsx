@@ -41,11 +41,11 @@ function HomePage() {
       {/* 03: HIGH-IMPACT METRICS & STATS BAR */}
       <StatsCounter />
 
-      {/* 04: SELECTED WORK & SYSTEM REPOSITORIES */}
-      <ProjectsSection />
-
-      {/* 05: SKILLS & CAPABILITIES (Simple Bento Grid) */}
+      {/* 04: SKILLS & CAPABILITIES (PLACED BEFORE PROJECTS) */}
       <SkillsSection />
+
+      {/* 05: SELECTED WORK & SYSTEM REPOSITORIES */}
+      <ProjectsSection />
 
       {/* 06: JOURNEY, TIMELINE & PATENT */}
       <JourneyTimeline />

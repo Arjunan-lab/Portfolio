@@ -6,8 +6,8 @@ import { PERSONAL_INFO } from '../data/portfolioData';
 const NAV_ITEMS = [
   { label: 'Home', sectionId: 'hero', route: '/' },
   { label: 'About', sectionId: 'about', route: '/#about' },
-  { label: 'Projects', sectionId: 'projects', route: '/#projects' },
   { label: 'Skills', sectionId: 'skills', route: '/#skills' },
+  { label: 'Projects', sectionId: 'projects', route: '/#projects' },
   { label: 'Journey', sectionId: 'journey', route: '/#journey' },
   { label: 'Services', sectionId: 'services', route: '/#services' },
   { label: 'Contact', sectionId: 'contact', route: '/#contact' }
