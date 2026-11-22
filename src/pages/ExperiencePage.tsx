@@ -6,39 +6,28 @@ import { MacOSStackCard } from '../components/ui/MacOSStackCard';
 import { CertificateModal } from '../components/ui/CertificateModal';
 import { ScrollReveal } from '../components/ui/ScrollReveal';
 import { CobaltRibbon3D } from '../components/ui/CobaltRibbon3D';
+import { SplitReveal } from '../motion/SplitReveal';
 
 const CERTIFICATE_MAP: Record<string, { src: string; title: string; badge: string; pdf?: string }> = {
   'hostel-hackathon': {
-    src: '/assets/certificates/hostel_hackathon_cert.jpg',
+    src: '/assets/certificates/hostel_hackathon_cert.webp',
     title: 'H² Hostel Hackathon Certificate of Participation — KPRIET',
     badge: 'HOSTEL HACKATHON',
   },
-  'samsung-innovation-campus': {
-    src: '/assets/certificates/samsung_innovation_cert.jpg',
-    title: 'Samsung Innovation Campus Artificial Intelligence Certificate (SIC23477)',
-    badge: 'SAMSUNG ELECTRONICS',
-    pdf: '/assets/Samsung_Innovation_Campus_Cert.pdf',
-  },
-  'patent-publication': {
-    src: '/assets/certificates/patent_gazette_cert.png',
-    title: 'Govt. of India Official Patent Publication (202641064539 A)',
-    badge: 'INDIAN PATENT GAZETTE',
-    pdf: '/assets/Microscopy_System_Patent_Publication.pdf',
-  },
   'infosys-internship': {
-    src: '/assets/certificates/infosys_springboard_cert.png',
+    src: '/assets/certificates/infosys_springboard_cert.webp',
     title: 'Infosys Springboard AI & ML Internship Certificate (Internship 7.0)',
     badge: 'INFOSYS SPRINGBOARD',
     pdf: '/assets/Infosys_Springboard_Internship_Cert.pdf',
   },
   'judahcode-internship': {
-    src: '/assets/certificates/judahcode_internship_cert.png',
+    src: '/assets/certificates/judahcode_internship_cert.webp',
     title: 'Judah Code Technologies Java Software Developer Internship Certificate',
     badge: 'JUDAHCODE TECH',
     pdf: '/assets/JudahCode_Internship_Cert.pdf',
   },
   'stem-innovators-expo': {
-    src: '/assets/certificates/stem_innovators_cert.jpg',
+    src: '/assets/certificates/stem_innovators_cert.webp',
     title: 'STEM Innovators Expo 2025 Certificate of Merit — KPRIET',
     badge: 'STEM INNOVATORS',
   },
@@ -71,16 +60,9 @@ export const ExperiencePage = () => {
             <span className="font-mono text-xs text-text-muted uppercase tracking-widest">
               05 — JOURNEY &amp; ACHIEVEMENTS
             </span>
-            <h1 className="font-display font-black text-4xl sm:text-6xl lg:text-[76px] tracking-tight leading-[1.04]">
-              Learning.{' '}
-              <span className="block">Building.</span>
-              <span className="block">
-                Moving{' '}
-                <span className="font-serif-italic font-normal italic text-cobalt-light text-[1.08em] pr-1">
-                  forward.
-                </span>
-              </span>
-            </h1>
+            <SplitReveal as="h1" type="lines" className="font-display font-black text-4xl sm:text-6xl lg:text-[76px] tracking-tight leading-[1.04]">
+              Learning. Building. Moving forward.
+            </SplitReveal>
             <p className="font-sans text-lg sm:text-2xl text-text-muted leading-relaxed font-light">
               A comprehensive record of academic rigor, corporate technical programs, competitive hackathons, and published intellectual property.
             </p>
@@ -113,16 +95,16 @@ export const ExperiencePage = () => {
             {/* Quick Metrics Badges */}
             <div className="p-5 rounded-2xl bg-[#14161E] border border-border-dark space-y-2.5 text-xs font-mono shadow-subtle-card">
               <div className="flex items-center justify-between text-gray-300">
-                <span>INTELLECTUAL PROPERTY</span>
-                <span className="font-bold text-acid-lime">1 PATENT PUBLISHED</span>
-              </div>
-              <div className="flex items-center justify-between text-gray-300">
                 <span>ACADEMIC PERFORMANCE</span>
                 <span className="font-bold text-white">CGPA 8.42</span>
               </div>
               <div className="flex items-center justify-between text-gray-300">
-                <span>CORPORATE CREDENTIALS</span>
-                <span className="font-bold text-cobalt-light">SAMSUNG &amp; INFOSYS</span>
+                <span>INDUSTRY INTERNSHIP</span>
+                <span className="font-bold text-acid-lime">INFOSYS SPRINGBOARD AI</span>
+              </div>
+              <div className="flex items-center justify-between text-gray-300">
+                <span>SOFTWARE INTERNSHIP</span>
+                <span className="font-bold text-cobalt-light">JUDAHCODE TECH</span>
               </div>
               <div className="flex items-center justify-between text-gray-300">
                 <span>HACKATHON HONORS</span>
@@ -145,7 +127,7 @@ export const ExperiencePage = () => {
           <div className="lg:col-span-7 space-y-6">
             {MILESTONES.map((item, idx) => {
               const cert = CERTIFICATE_MAP[item.id] || {
-                src: '/assets/certificates/patent_gazette_cert.png',
+                src: '/assets/certificates/hostel_hackathon_cert.webp',
                 title: item.title,
                 badge: 'VERIFIED CREDENTIAL',
               };

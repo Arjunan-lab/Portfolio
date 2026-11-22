@@ -1,33 +1,35 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, ArrowUpRight, Copy, Check, Send, Mail, MapPin, Phone } from 'lucide-react';
+import { ArrowLeft, ArrowUpRight, Copy, Check, Mail, MapPin, Phone } from 'lucide-react';
 import { LinkedinIcon, GithubIcon } from '../components/ui/Icons';
 import { PERSONAL_INFO } from '../data/portfolioData';
 import { CobaltRibbon3D } from '../components/ui/CobaltRibbon3D';
+import { ContactForm } from '../components/ContactForm';
+import { SplitReveal } from '../motion/SplitReveal';
 
 export const ContactPage = () => {
-  const [copied, setCopied] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    subject: '',
-    message: ''
-  });
+  const [copiedEmail, setCopiedEmail] = useState(false);
+  const [copiedPhone, setCopiedPhone] = useState(false);
 
   const handleCopyEmail = () => {
     navigator.clipboard.writeText(PERSONAL_INFO.contact.email);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2500);
+    setCopiedEmail(true);
+    setTimeout(() => setCopiedEmail(false), 2500);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setSubmitted(true);
+  const handleCopyPhone = () => {
+    navigator.clipboard.writeText(PERSONAL_INFO.contact.phone);
+    setCopiedPhone(true);
+    setTimeout(() => setCopiedPhone(false), 2500);
   };
 
   return (
     <div className="min-h-screen bg-[#0C0D11] text-white pt-32 pb-24 px-6 sm:px-12 lg:px-16 selection:bg-cobalt selection:text-white">
+      {/* Screen-reader live region */}
+      <div aria-live="polite" className="sr-only">
+        {copiedEmail ? 'Email address copied to clipboard.' : copiedPhone ? 'Phone number copied to clipboard.' : ''}
+      </div>
+
       <div className="max-w-6xl mx-auto space-y-20">
         
         {/* Navigation */}
@@ -40,24 +42,18 @@ export const ContactPage = () => {
             <span>Return to Overview</span>
           </Link>
           <span className="font-mono text-xs uppercase tracking-widest text-cobalt-light font-bold">
-            DIRECT COLLABORATION // 06
+            DIRECT COLLABORATION // 07
           </span>
         </div>
 
         {/* Header */}
         <div className="space-y-6 max-w-4xl">
           <span className="font-mono text-xs text-text-muted uppercase tracking-widest">
-            06 — LET'S CONNECT
+            07 — LET'S CONNECT
           </span>
-          <h1 className="font-display font-black text-4xl sm:text-6xl lg:text-[76px] tracking-tight leading-[1.04]">
-            Let's make{' '}
-            <span className="block">
-              something{' '}
-              <span className="font-serif-italic font-normal italic text-cobalt-light text-[1.08em] pr-1">
-                meaningful.
-              </span>
-            </span>
-          </h1>
+          <SplitReveal as="h1" type="lines" className="font-display font-black text-4xl sm:text-6xl lg:text-[76px] tracking-tight leading-[1.04]">
+            Let's make something meaningful.
+          </SplitReveal>
           <p className="font-sans text-lg sm:text-2xl text-text-muted leading-relaxed font-light">
             I'm currently seeking high-impact software engineering opportunities, product internships, and technical collaborations. Let's discuss what we can build together.
           </p>
@@ -77,85 +73,7 @@ export const ContactPage = () => {
               </p>
             </div>
 
-            {submitted ? (
-              <div className="p-8 rounded-2xl bg-acid-lime/10 border border-acid-lime/30 text-center space-y-4">
-                <div className="w-12 h-12 rounded-full bg-acid-lime/20 flex items-center justify-center mx-auto text-acid-lime">
-                  <Check size={24} />
-                </div>
-                <h3 className="font-display font-bold text-xl text-white">
-                  Message Dispatched!
-                </h3>
-                <p className="text-sm font-sans text-gray-300 max-w-md mx-auto">
-                  Thank you for reaching out, {formData.name || 'there'}! I'll review your note and get back to you promptly at {formData.email}.
-                </p>
-                <button
-                  onClick={() => setSubmitted(false)}
-                  className="px-6 py-2 rounded-full bg-white text-text-black text-xs font-sans font-semibold hover:bg-cobalt hover:text-white transition-colors"
-                >
-                  Send Another Message
-                </button>
-              </div>
-            ) : (
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <label className="text-xs font-mono text-text-muted uppercase">Your Name</label>
-                    <input
-                      type="text"
-                      required
-                      placeholder="e.g. Alex Rivera"
-                      value={formData.name}
-                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      className="w-full px-4 py-3.5 rounded-xl border border-border-dark bg-white/5 text-white text-sm focus:outline-none focus:border-cobalt transition-colors"
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <label className="text-xs font-mono text-text-muted uppercase">Email Address</label>
-                    <input
-                      type="email"
-                      required
-                      placeholder="alex@domain.com"
-                      value={formData.email}
-                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      className="w-full px-4 py-3.5 rounded-xl border border-border-dark bg-white/5 text-white text-sm focus:outline-none focus:border-cobalt transition-colors"
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-xs font-mono text-text-muted uppercase">Subject / Intent</label>
-                  <input
-                    type="text"
-                    required
-                    placeholder="Full-time Opportunity / Project Collaboration / Advisory"
-                    value={formData.subject}
-                    onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
-                    className="w-full px-4 py-3.5 rounded-xl border border-border-dark bg-white/5 text-white text-sm focus:outline-none focus:border-cobalt transition-colors"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-xs font-mono text-text-muted uppercase">Message</label>
-                  <textarea
-                    rows={5}
-                    required
-                    placeholder="Tell me about your project, team, or opportunity..."
-                    value={formData.message}
-                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                    className="w-full px-4 py-3.5 rounded-xl border border-border-dark bg-white/5 text-white text-sm focus:outline-none focus:border-cobalt transition-colors resize-none"
-                  />
-                </div>
-
-                <button
-                  type="submit"
-                  className="w-full py-4 rounded-full bg-white text-text-black font-sans text-xs font-bold hover:bg-cobalt hover:text-white transition-colors flex items-center justify-center gap-2 shadow-sm cursor-pointer"
-                >
-                  <Send size={14} />
-                  <span>Send Message</span>
-                </button>
-              </form>
-            )}
+            <ContactForm idPrefix="page" />
           </div>
 
           {/* Right Column: Verified Details & Quick Actions (5 cols) */}
@@ -168,7 +86,7 @@ export const ContactPage = () => {
                 <span className="font-bold text-white uppercase">CURRENT STATUS</span>
               </div>
               <p className="font-sans text-sm text-gray-300 leading-relaxed">
-                Available for internships, full-time junior engineering roles (starting 2026/2027), and technical projects.
+                Available for internships, full-time junior engineering roles, and technical projects.
               </p>
             </div>
 
@@ -187,20 +105,33 @@ export const ContactPage = () => {
                   </span>
                 </div>
                 <button
+                  type="button"
                   onClick={handleCopyEmail}
                   className="p-1.5 rounded-lg text-gray-400 hover:text-white hover:bg-white/10 transition-all cursor-pointer"
+                  aria-label="Copy email address to clipboard"
                   title="Copy email"
                 >
-                  {copied ? <Check size={14} className="text-acid-lime" /> : <Copy size={14} />}
+                  {copiedEmail ? <Check size={14} className="text-acid-lime" /> : <Copy size={14} />}
                 </button>
               </div>
 
-              {/* Phone */}
-              <div className="flex items-center gap-3 p-3 rounded-xl bg-white/5 border border-border-dark">
-                <Phone size={16} className="text-cobalt-light" />
-                <span className="font-mono text-xs text-white font-semibold">
-                  {PERSONAL_INFO.contact.phone}
-                </span>
+              {/* Phone with Copy */}
+              <div className="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-border-dark">
+                <div className="flex items-center gap-3">
+                  <Phone size={16} className="text-cobalt-light" />
+                  <span className="font-mono text-xs text-white font-semibold">
+                    {PERSONAL_INFO.contact.phone}
+                  </span>
+                </div>
+                <button
+                  type="button"
+                  onClick={handleCopyPhone}
+                  className="p-1.5 rounded-lg text-gray-400 hover:text-white hover:bg-white/10 transition-all cursor-pointer"
+                  aria-label="Copy phone number to clipboard"
+                  title="Copy phone"
+                >
+                  {copiedPhone ? <Check size={14} className="text-acid-lime" /> : <Copy size={14} />}
+                </button>
               </div>
 
               {/* Location */}
@@ -219,6 +150,7 @@ export const ContactPage = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="p-4 rounded-2xl bg-[#14161E] border border-border-dark hover:border-cobalt text-white hover:text-cobalt-light flex items-center justify-center gap-2 text-xs font-sans font-semibold transition-all shadow-subtle-card"
+                aria-label="Visit LinkedIn Profile"
               >
                 <LinkedinIcon className="w-4 h-4 text-cobalt-light" />
                 <span>LinkedIn</span>
@@ -230,6 +162,7 @@ export const ContactPage = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="p-4 rounded-2xl bg-[#14161E] border border-border-dark hover:border-cobalt text-white hover:text-cobalt-light flex items-center justify-center gap-2 text-xs font-sans font-semibold transition-all shadow-subtle-card"
+                aria-label="Visit GitHub Profile"
               >
                 <GithubIcon className="w-4 h-4" />
                 <span>GitHub</span>

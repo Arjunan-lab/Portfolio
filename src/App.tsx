@@ -1,159 +1,148 @@
-import { useEffect, useState } from 'react';
+import { useState, lazy, Suspense, useEffect } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
-import Lenis from 'lenis';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ScrollToTop } from './components/ui/ScrollToTop';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
-import { StatsCounter } from './components/StatsCounter';
-import { ServicesSection } from './components/ServicesSection';
 import { About } from './components/About';
-import { ProjectsSection } from './components/Projects/ProjectsSection';
-import { SkillsSection } from './components/SkillsSection';
-import { JourneyTimeline } from './components/JourneyTimeline';
-import { TestimonialsSection } from './components/TestimonialsSection';
-import { ContactSection } from './components/ContactSection';
+import { CustomCursor } from './components/ui/CustomCursor';
+import { HireMePill } from './components/ui/HireMePill';
+import { Preloader } from './components/Preloader';
+import { RouteTransitionWrapper } from './components/RouteCurtain';
+import { SmoothScrollProvider } from './motion/SmoothScrollProvider';
+import { useLenis } from './motion/SmoothScrollContext';
+import { checkReducedMotion } from './motion/tokens';
 
-// Dedicated Route Pages
-import { AboutPage } from './pages/AboutPage';
-import { WorkPage } from './pages/WorkPage';
-import { ExperiencePage } from './pages/ExperiencePage';
-import { ContactPage } from './pages/ContactPage';
-import { SoilHealth } from './projects/SoilHealth';
-import { Jarvis } from './projects/Jarvis';
+// Lazy below-the-fold sections
+const StatsCounter = lazy(() => import('./components/StatsCounter').then(m => ({ default: m.StatsCounter })));
+const SkillsSection = lazy(() => import('./components/SkillsSection').then(m => ({ default: m.SkillsSection })));
+const ProjectsSection = lazy(() => import('./components/Projects/ProjectsSection').then(m => ({ default: m.ProjectsSection })));
+const JourneyTimeline = lazy(() => import('./components/JourneyTimeline').then(m => ({ default: m.JourneyTimeline })));
+const TestimonialsSection = lazy(() => import('./components/TestimonialsSection').then(m => ({ default: m.TestimonialsSection })));
+const ContactSection = lazy(() => import('./components/ContactSection').then(m => ({ default: m.ContactSection })));
 
-// Global GSAP Plugin Registration
-if (typeof window !== 'undefined') {
-  gsap.registerPlugin(ScrollTrigger);
-}
+// Lazy dedicated route pages
+const AboutPage = lazy(() => import('./pages/AboutPage').then(m => ({ default: m.AboutPage })));
+const WorkPage = lazy(() => import('./pages/WorkPage').then(m => ({ default: m.WorkPage })));
+const ExperiencePage = lazy(() => import('./pages/ExperiencePage').then(m => ({ default: m.ExperiencePage })));
+const ContactPage = lazy(() => import('./pages/ContactPage').then(m => ({ default: m.ContactPage })));
+const SoilHealth = lazy(() => import('./projects/SoilHealth').then(m => ({ default: m.SoilHealth })));
+const Jarvis = lazy(() => import('./projects/Jarvis').then(m => ({ default: m.Jarvis })));
+const NotFoundPage = lazy(() => import('./pages/NotFoundPage').then(m => ({ default: m.NotFoundPage })));
 
-// Main Landing Page Experience (Envato Top Developer Portfolio Hierarchy)
+const LoadingFallback = () => (
+  <div className="w-full min-h-[300px] flex items-center justify-center">
+    <div className="w-6 h-6 border-2 border-cobalt border-t-transparent rounded-full animate-spin" />
+  </div>
+);
+
+// Streamlined Landing Page (6 Core Sections Hierarchy)
 function HomePage() {
   return (
     <main>
-      {/* 01: HERO */}
+      {/* 01: HERO with Outcome Headline, 3D Focal Sculpture & Marquee */}
       <Hero />
 
-      {/* 02: ABOUT ME & ACADEMIC TELEMETRY */}
+      {/* 02: ABOUT ME, ACADEMIC TELEMETRY & WHAT I BRING */}
       <About />
 
-      {/* 03: HIGH-IMPACT METRICS & STATS BAR */}
-      <StatsCounter />
+      {/* Below-the-fold lazy loaded sections */}
+      <Suspense fallback={<LoadingFallback />}>
+        {/* 03: HIGH-IMPACT METRICS & STATS BAR */}
+        <StatsCounter />
 
-      {/* 04: SKILLS & CAPABILITIES (PLACED BEFORE PROJECTS) */}
-      <SkillsSection />
+        {/* 04: SKILLS & CAPABILITIES */}
+        <SkillsSection />
 
-      {/* 05: SELECTED WORK & SYSTEM REPOSITORIES */}
-      <ProjectsSection />
+        {/* 05: SELECTED WORK & HORIZONTAL GALLERY */}
+        <ProjectsSection />
 
-      {/* 06: JOURNEY, TIMELINE & PATENT */}
-      <JourneyTimeline />
+        {/* 06: JOURNEY, MILESTONES & ACHIEVEMENTS */}
+        <JourneyTimeline />
 
-      {/* 07: MENTORSHIP & ENDORSEMENTS */}
-      <TestimonialsSection />
+        {/* MENTORSHIP & ENDORSEMENTS */}
+        <TestimonialsSection />
 
-      {/* 08: SERVICES / WHAT I BRING (BEFORE CONTACT) */}
-      <ServicesSection />
-
-      {/* 09: CONTACT & COLLABORATION */}
-      <ContactSection />
+        {/* 07: DIRECT CONTACT & INQUIRY CHANNELS */}
+        <ContactSection />
+      </Suspense>
     </main>
   );
 }
 
-export function App() {
-  const [scrollProgress, setScrollProgress] = useState(0);
+function AppContent() {
+  const [showPreloader, setShowPreloader] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    if (checkReducedMotion()) return false;
+    return sessionStorage.getItem('arjun_preloaded') !== 'true';
+  });
+
   const location = useLocation();
+  const { scrollTo } = useLenis();
 
-  useEffect(() => {
-    // High-performance Lenis Smooth Scroll Engine
-    const lenis = new Lenis({
-      duration: 1.25,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      orientation: 'vertical',
-      gestureOrientation: 'vertical',
-      smoothWheel: true,
-      wheelMultiplier: 1.05,
-    });
-    (window as any).lenis = lenis;
-
-    // Synchronize Lenis scroll ticker with GSAP ScrollTrigger to eliminate jitter
-    lenis.on('scroll', ScrollTrigger.update);
-
-    const tickerCallback = (time: number) => {
-      lenis.raf(time * 1000);
-    };
-
-    gsap.ticker.add(tickerCallback);
-    gsap.ticker.lagSmoothing(0);
-
-    const handleScroll = () => {
-      const totalScroll = document.documentElement.scrollTop;
-      const windowHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-      if (windowHeight > 0) {
-        setScrollProgress((totalScroll / windowHeight) * 100);
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-
-    return () => {
-      gsap.ticker.remove(tickerCallback);
-      lenis.destroy();
-      (window as any).lenis = null;
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, [location.pathname]);
-
-  // Handle cross-page and in-page anchor hashtag navigation
+  // Handle in-page anchor hashtag navigation
   useEffect(() => {
     if (location.hash) {
       const id = location.hash.replace('#', '');
-      const timer = setTimeout(() => {
+      let attempts = 0;
+      const interval = setInterval(() => {
+        attempts++;
         const el = document.getElementById(id);
         if (el) {
-          if ((window as any).lenis) {
-            (window as any).lenis.scrollTo(el, { offset: -80, duration: 1.2 });
-          } else {
-            const top = el.getBoundingClientRect().top + window.scrollY - 80;
-            window.scrollTo({ top, behavior: 'smooth' });
-          }
+          scrollTo(el, { offset: -80 });
+          clearInterval(interval);
+        } else if (attempts > 30) {
+          clearInterval(interval);
         }
-      }, 120);
-      return () => clearTimeout(timer);
+      }, 50);
+      return () => clearInterval(interval);
     }
-  }, [location]);
+  }, [location.pathname, location.hash, scrollTo]);
 
   return (
-    <div className="min-h-screen bg-canvas-light dark:bg-[#0C0D11] text-text-black dark:text-white font-sans antialiased selection:bg-cobalt selection:text-white transition-colors duration-300 relative">
+    <div className="min-h-screen bg-[#0C0D11] text-white font-sans antialiased selection:bg-cobalt selection:text-white relative overflow-x-hidden">
       
+      {/* Top Primary Navigation Bar */}
+      <Navbar />
+
+      {/* Cinematic Introductory Loading Sequence */}
+      {showPreloader && (
+        <Preloader onComplete={() => setShowPreloader(false)} />
+      )}
+
+      {/* Desktop Fine Pointer Custom Cursor */}
+      <CustomCursor />
+
+      {/* Sticky Quick-Connect "Hire Me" Pill & Scroll-To-Top Dock */}
+      <HireMePill />
+
       {/* Scroll restoration helper */}
       <ScrollToTop />
 
-      {/* Top Subtle Reading Progress Bar (Electric Cobalt) */}
-      <div className="fixed top-0 left-0 w-full h-[2.5px] z-50 pointer-events-none bg-transparent">
-        <div
-          className="h-full bg-cobalt transition-all duration-150 ease-out"
-          style={{ width: `${scrollProgress}%` }}
-        />
-      </div>
-
-      {/* HEADER / NAVIGATION */}
-      <Navbar />
-
-      {/* APP ROUTES */}
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/about" element={<AboutPage />} />
-        <Route path="/work" element={<WorkPage />} />
-        <Route path="/work/soil-health" element={<SoilHealth />} />
-        <Route path="/work/jarvis" element={<Jarvis />} />
-        <Route path="/experience" element={<ExperiencePage />} />
-        <Route path="/contact" element={<ContactPage />} />
-      </Routes>
+      {/* APP ROUTES WITH CINEMATIC CURTAIN TRANSITIONS */}
+      <RouteTransitionWrapper>
+        <Suspense fallback={<LoadingFallback />}>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/work" element={<WorkPage />} />
+            <Route path="/work/soil-health" element={<SoilHealth />} />
+            <Route path="/work/jarvis" element={<Jarvis />} />
+            <Route path="/experience" element={<ExperiencePage />} />
+            <Route path="/contact" element={<ContactPage />} />
+            <Route path="*" element={<NotFoundPage />} />
+          </Routes>
+        </Suspense>
+      </RouteTransitionWrapper>
 
     </div>
+  );
+}
+
+export function App() {
+  return (
+    <SmoothScrollProvider>
+      <AppContent />
+    </SmoothScrollProvider>
   );
 }
 

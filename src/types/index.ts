@@ -9,6 +9,7 @@ export interface Project {
   technicalApproach: string;
   keyFeatures: string[];
   techStack: string[];
+  tags: ('ai' | 'fullstack' | 'systems')[];
   coverImage?: string;
   implementationDetails?: string[];
   githubUrl?: string;

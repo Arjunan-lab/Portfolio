@@ -107,7 +107,7 @@ export const Jarvis = () => {
 
               <div className="space-y-2 text-xs font-mono text-white/70">
                 <div className="p-2.5 rounded-lg bg-canvas-dark border border-white/10 flex justify-between">
-                  <span className="flex items-center gap-2"><FolderCheck size={12} className="text-acid-lime" /> Patent_Application.pdf</span>
+                  <span className="flex items-center gap-2"><FolderCheck size={12} className="text-acid-lime" /> System_Architecture_Spec.pdf</span>
                   <span className="text-acid-lime">INDEXED</span>
                 </div>
                 <div className="p-2.5 rounded-lg bg-canvas-dark border border-white/10 flex justify-between">

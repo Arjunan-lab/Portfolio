@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { 
   GraduationCap, 
   MapPin, 
@@ -6,11 +6,16 @@ import {
   Star, 
   Award, 
   Briefcase, 
-  ChevronDown,
   Sparkles,
-  Layers
+  ChevronDown
 } from 'lucide-react';
-import { useCornerConvergence } from '../motion/scrollMotion';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { checkReducedMotion } from '../motion/tokens';
+
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 interface SkillItem {
   id: string;
@@ -79,7 +84,7 @@ const SKILLS_DATA: SkillItem[] = [
     category: 'Computer Vision & Deep Nets',
     frameworks: ['EfficientNetB2', 'YOLOv8', 'OpenCV', 'PyTorch Inference', 'Transfer Learning'],
     description: 'Convolutional feature extraction, real-time object tracking, and vector embeddings.',
-    appliedIn: 'Samsung Innovation Campus AI & Automated Microscopy System (Patent)'
+    appliedIn: 'Infosys Springboard AI & Production Vision Pipelines'
   },
   {
     id: 'cloud-db',
@@ -97,7 +102,7 @@ const SKILLS_DATA: SkillItem[] = [
     category: 'Infrastructure & Tooling',
     frameworks: ['Docker', 'Git / GitHub', 'Postman', 'Linux / Bash', 'Vercel CI/CD'],
     description: 'Reproducible container images, branch-based CI/CD pipelines, and microservice orchestration.',
-    appliedIn: 'Multi-container deployment pipelines across all 8 GitHub repositories'
+    appliedIn: 'Multi-container deployment pipelines across all 9 GitHub repositories'
   }
 ];
 
@@ -118,18 +123,75 @@ const QUICK_TAGS = [
 ];
 
 export const SkillsSection = () => {
-  const [hoveredSkill, setHoveredSkill] = useState<string | null>(null);
   const [expandedSkill, setExpandedSkill] = useState<string | null>('python-ml');
-
   const sectionRef = useRef<HTMLElement | null>(null);
-  const headingRef = useRef<HTMLDivElement | null>(null);
-  const textRef = useRef<HTMLDivElement | null>(null);
+  const cardRef = useRef<HTMLDivElement | null>(null);
 
-  useCornerConvergence({
-    sectionRef,
-    headingRef,
-    textRef,
-  });
+  // Stagger entrance of skill items
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section || checkReducedMotion()) return;
+
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        '.skill-row-item',
+        { opacity: 0, y: 20 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.6,
+          stagger: 0.08,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: section,
+            start: 'top 80%',
+            toggleActions: 'play none none none',
+          },
+        }
+      );
+
+      gsap.fromTo(
+        '.quick-tag-chip',
+        { opacity: 0, scale: 0.9 },
+        {
+          opacity: 1,
+          scale: 1,
+          duration: 0.4,
+          stagger: 0.04,
+          ease: 'back.out(1.4)',
+          scrollTrigger: {
+            trigger: '.quick-tags-container',
+            start: 'top 90%',
+            toggleActions: 'play none none none',
+          },
+        }
+      );
+    }, section);
+
+    return () => ctx.revert();
+  }, []);
+
+  // Spotlight radial gradient on pointer move
+  const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!cardRef.current) return;
+    const rect = cardRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    cardRef.current.style.setProperty('--mx', `${x}px`);
+    cardRef.current.style.setProperty('--my', `${y}px`);
+
+    // 3D tilt up to 4 degrees
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    const tiltX = ((y - centerY) / centerY) * -3;
+    const tiltY = ((x - centerX) / centerX) * 3;
+    cardRef.current.style.transform = `perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
+  };
+
+  const handlePointerLeave = () => {
+    if (!cardRef.current) return;
+    cardRef.current.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg)';
+  };
 
   return (
     <section
@@ -149,23 +211,19 @@ export const SkillsSection = () => {
             <span className="w-2 h-2 rounded-full bg-cobalt inline-block animate-pulse" />
             <span>03 // TECHNICAL EXPERTISE &amp; PROFICIENCY</span>
           </div>
-          <div className="hidden sm:flex items-center gap-2 text-[11px] font-mono text-text-muted">
+          <div className="hidden sm:flex items-center gap-2 text-xs font-mono text-text-muted">
             <Sparkles size={13} className="text-acid-lime" />
-            <span>HOVER ANY SKILL BAR TO ELABORATE DETAILS</span>
+            <span>CLICK ANY SKILL ROW TO EXPAND IMPLEMENTATION DETAILS</span>
           </div>
         </div>
 
-        {/* =============================================================== */}
-        {/* TWO-COLUMN REFERENCE UI LAYOUT                                  */}
-        {/* =============================================================== */}
+        {/* TWO-COLUMN REFERENCE UI LAYOUT */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
           
-          {/* ============================================================= */}
-          {/* LEFT COLUMN: Narrative & Academic / Industry Badges           */}
-          {/* ============================================================= */}
+          {/* LEFT COLUMN: Narrative & Academic / Industry Badges */}
           <div className="lg:col-span-5 space-y-8">
             
-            <div ref={headingRef} className="space-y-4">
+            <div className="space-y-4">
               <span className="text-xs font-mono tracking-widest uppercase text-cobalt-light font-semibold block">
                 — ABOUT MY CRAFT
               </span>
@@ -178,7 +236,7 @@ export const SkillsSection = () => {
               </h2>
             </div>
 
-            <div ref={textRef} className="space-y-4 font-sans text-sm sm:text-base text-gray-300 leading-relaxed font-light">
+            <div className="space-y-4 font-sans text-sm sm:text-base text-gray-300 leading-relaxed font-light">
               <p>
                 I'm <span className="font-semibold text-white">ARJUNAN</span>, a passionate{' '}
                 <span className="font-semibold text-cobalt-light">B.Tech Information Technology</span> student at{' '}
@@ -189,10 +247,9 @@ export const SkillsSection = () => {
               <p>
                 I thrive at the intersection of <span className="text-white font-medium">AI/ML</span>,{' '}
                 <span className="text-white font-medium">full-stack development</span>, and resilient systems design. 
-                I've completed a Python Developer internship at{' '}
-                <span className="text-cobalt-light font-medium">Infosys Springboard</span>, earned the{' '}
-                <span className="text-acid-lime font-medium">Samsung Innovation Campus</span> credential in{' '}
-                <span className="text-white font-semibold">Artificial Intelligence</span>, and published an Indian Patent in automated smart systems.
+                I've completed an AI & ML internship at{' '}
+                <span className="text-cobalt-light font-medium">Infosys Springboard</span>, participated in the{' '}
+                <span className="text-acid-lime font-medium">H² Hostel Hackathon</span> with a recognized room booking system, and engineered 8 verified production-grade applications.
               </p>
 
               <p className="text-xs sm:text-sm text-gray-400">
@@ -200,7 +257,7 @@ export const SkillsSection = () => {
               </p>
             </div>
 
-            {/* Badges Matrix (Harmonized Portfolio Palette) */}
+            {/* Badges Matrix */}
             <div className="flex flex-wrap gap-2.5 pt-2">
               <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs font-sans text-gray-200">
                 <GraduationCap size={13} className="text-cobalt-light" />
@@ -224,17 +281,17 @@ export const SkillsSection = () => {
 
               <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs font-sans text-white">
                 <Award size={13} className="text-cobalt-light" />
-                <span>Published Patent (IPO)</span>
+                <span>Infosys Springboard AI (7.0)</span>
               </div>
 
               <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-cobalt/10 border border-cobalt/25 text-xs font-sans text-cobalt-light">
                 <Award size={13} />
-                <span>Hostel Hackathon Winner</span>
+                <span>Hostel Hackathon Participant</span>
               </div>
 
               <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-acid-lime/10 border border-acid-lime/30 text-xs font-sans text-acid-lime font-semibold">
                 <Award size={13} />
-                <span>Samsung Innovation Campus (AI)</span>
+                <span>STEM Innovators Expo</span>
               </div>
 
               <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs font-sans text-gray-300">
@@ -243,14 +300,41 @@ export const SkillsSection = () => {
               </div>
             </div>
 
+            {/* Quick Skills Pills */}
+            <div className="space-y-3 pt-4 border-t border-border-dark">
+              <span className="font-mono text-xs uppercase tracking-wider text-text-muted block">
+                CORE TECHNICAL VOCABULARY
+              </span>
+              <div className="quick-tags-container flex flex-wrap gap-2">
+                {QUICK_TAGS.map((tag) => (
+                  <span
+                    key={tag}
+                    className="quick-tag-chip px-3 py-1 rounded-lg bg-[#14161E] border border-border-dark text-xs font-mono text-gray-300 hover:border-cobalt hover:text-white transition-all cursor-default"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+
           </div>
 
-          {/* ============================================================= */}
-          {/* RIGHT COLUMN: Skill Progress Bars (Cobalt to Acid-Lime)       */}
-          {/* ============================================================= */}
-          <div className="lg:col-span-7 space-y-6 bg-[#14161E] p-6 sm:p-10 rounded-3xl border border-border-dark shadow-subtle-card">
-            
-            <div className="flex items-center justify-between pb-3 border-b border-white/10">
+          {/* RIGHT COLUMN: Interactive Skill Matrix Card with Spotlight Radial Gradient */}
+          <div
+            ref={cardRef}
+            onPointerMove={handlePointerMove}
+            onPointerLeave={handlePointerLeave}
+            className="lg:col-span-7 relative group space-y-5 bg-[#14161E] p-6 sm:p-10 rounded-3xl border border-border-dark shadow-subtle-card transition-transform duration-200 ease-out will-change-transform"
+          >
+            {/* Spotlight Radial Gradient Overlay */}
+            <div
+              className="pointer-events-none absolute -inset-px rounded-3xl opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+              style={{
+                background: 'radial-gradient(550px circle at var(--mx, 50%) var(--my, 50%), rgba(43, 89, 255, 0.12), transparent 45%)',
+              }}
+            />
+
+            <div className="flex items-center justify-between pb-3 border-b border-white/10 relative z-10">
               <span className="font-mono text-xs text-text-muted uppercase tracking-wider">
                 DOMAIN COMPETENCIES &amp; BENCHMARKS
               </span>
@@ -259,114 +343,62 @@ export const SkillsSection = () => {
               </span>
             </div>
 
-            {/* List of Skill Bars */}
-            <div className="space-y-4">
+            <div className="space-y-4 relative z-10">
               {SKILLS_DATA.map((skill) => {
-                const isHovered = hoveredSkill === skill.id;
-                const isExpanded = isHovered || expandedSkill === skill.id;
+                const isExpanded = expandedSkill === skill.id;
 
                 return (
                   <div
                     key={skill.id}
-                    onMouseEnter={() => {
-                      setHoveredSkill(skill.id);
-                      setExpandedSkill(skill.id);
-                    }}
-                    onMouseLeave={() => setHoveredSkill(null)}
-                    className={`p-3.5 sm:p-4 rounded-2xl transition-all duration-300 cursor-pointer ${
-                      isExpanded
-                        ? 'bg-white/5 border border-cobalt/40 shadow-lg shadow-cobalt/5'
-                        : 'bg-white/[0.02] border border-white/5 hover:border-white/15'
-                    }`}
+                    className="skill-row-item rounded-2xl bg-[#0C0D11]/60 border border-white/5 hover:border-cobalt/40 p-4 transition-all duration-200 cursor-pointer"
+                    onClick={() => setExpandedSkill(isExpanded ? null : skill.id)}
                   >
-                    {/* Header: Name and Percentage */}
-                    <div className="flex items-center justify-between mb-2">
-                      <div className="flex items-center gap-2">
-                        <span className="font-sans text-sm sm:text-base font-medium text-white group-hover:text-cobalt-light transition-colors">
-                          {skill.name}
-                        </span>
+                    <div className="flex items-center justify-between text-xs sm:text-sm font-medium text-white mb-2">
+                      <span className="flex items-center gap-2">
+                        <span>{skill.name}</span>
                         {skill.highlight && (
-                          <span className="px-2 py-0.5 rounded text-[9px] font-mono uppercase bg-cobalt/20 text-cobalt-light border border-cobalt/30 font-semibold">
-                            Core
-                          </span>
+                          <span className="w-1.5 h-1.5 rounded-full bg-acid-lime animate-pulse inline-block" />
                         )}
-                      </div>
-
-                      <div className="flex items-center gap-2">
-                        <span className="font-mono font-bold text-xs sm:text-sm text-acid-lime">
-                          {skill.percentage}%
-                        </span>
+                      </span>
+                      <div className="flex items-center gap-3">
+                        <span className="font-mono text-xs font-bold text-cobalt-light">{skill.percentage}%</span>
                         <ChevronDown
                           size={14}
-                          className={`text-gray-400 transition-transform duration-300 ${
-                            isExpanded ? 'rotate-180 text-cobalt-light' : ''
+                          className={`text-text-muted transition-transform duration-200 ${
+                            isExpanded ? 'rotate-180 text-white' : ''
                           }`}
                         />
                       </div>
                     </div>
 
-                    {/* Signature Progress Bar Track (Cobalt to Acid-Lime) */}
-                    <div className="relative w-full h-2 bg-white/10 rounded-full overflow-hidden">
+                    {/* Gradient Progress Bar */}
+                    <div className="w-full h-2 rounded-full bg-white/5 overflow-hidden">
                       <div
-                        className="h-full rounded-full bg-gradient-to-r from-cobalt via-cobalt-light to-acid-lime transition-all duration-700 ease-out relative"
+                        className="h-full rounded-full bg-gradient-to-r from-cobalt via-cobalt-light to-acid-lime transition-all duration-700 ease-out"
                         style={{ width: `${skill.percentage}%` }}
-                      >
-                        {/* Glowing Dot Indicator on hover / active */}
-                        {isExpanded && (
-                          <span className="absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-acid-lime border-2 border-white shadow-[0_0_12px_#7CE028] -mr-1 animate-pulse" />
-                        )}
-                      </div>
+                      />
                     </div>
 
-                    {/* Expanded Detail Panel (Revealed on Hover) */}
+                    {/* Expandable Details Drawer */}
                     {isExpanded && (
-                      <div className="mt-3 pt-3 border-t border-white/10 space-y-2 animate-fadeIn text-xs">
-                        <p className="text-gray-300 font-sans leading-relaxed">
-                          {skill.description}
-                        </p>
-
+                      <div className="pt-3 mt-3 border-t border-white/5 space-y-2 text-xs font-sans text-gray-300">
+                        <p className="font-light leading-relaxed">{skill.description}</p>
                         <div className="flex flex-wrap items-center gap-1.5 pt-1">
-                          <span className="text-[10px] font-mono text-gray-400 uppercase tracking-wider mr-1">
-                            Stack:
-                          </span>
-                          {skill.frameworks.map((fw) => (
-                            <span
-                              key={fw}
-                              className="px-2 py-0.5 rounded text-[10px] font-mono bg-cobalt/10 text-cobalt-light border border-cobalt/20 font-medium"
-                            >
-                              {fw}
+                          <span className="font-mono text-text-muted text-[11px] uppercase mr-1">Stack:</span>
+                          {skill.frameworks.map((f, i) => (
+                            <span key={i} className="px-2 py-0.5 rounded bg-white/5 border border-white/5 font-mono text-[11px] text-cobalt-light">
+                              {f}
                             </span>
                           ))}
                         </div>
-
-                        <div className="flex items-center gap-1.5 pt-1 text-[11px] font-mono text-text-muted">
-                          <Layers size={11} className="text-acid-lime" />
-                          <span>Applied in: <strong className="text-gray-200">{skill.appliedIn}</strong></span>
+                        <div className="pt-1 text-[11px] font-mono text-acid-lime truncate">
+                          Applied: {skill.appliedIn}
                         </div>
                       </div>
                     )}
-
                   </div>
                 );
               })}
-            </div>
-
-            {/* Quick Tech Tags Pill Cluster (Unified Theme) */}
-            <div className="pt-4 border-t border-white/10 space-y-3">
-              <span className="font-mono text-[11px] text-gray-400 uppercase tracking-wider block">
-                PRIMARY TOOLSET &amp; RUNTIMES:
-              </span>
-
-              <div className="flex flex-wrap gap-2">
-                {QUICK_TAGS.map((tag) => (
-                  <span
-                    key={tag}
-                    className="px-3 py-1 rounded-lg bg-white/5 hover:bg-cobalt/10 border border-border-dark hover:border-cobalt text-xs font-mono text-gray-300 hover:text-white transition-all cursor-default"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
             </div>
 
           </div>

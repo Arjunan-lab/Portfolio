@@ -1,46 +1,115 @@
-import { Award, FileText, Cpu, Zap, GraduationCap } from 'lucide-react';
+import { useEffect, useRef } from 'react';
+import { Award, Cpu, Zap, GraduationCap } from 'lucide-react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { PROJECTS, PERSONAL_INFO } from '../data/portfolioData';
+import { checkReducedMotion } from '../motion/tokens';
 
-const STATS = [
-  {
-    icon: Award,
-    value: "8.42",
-    label: "ACADEMIC CGPA",
-    subtext: "KPR Institute B.Tech IT",
-    color: "text-cobalt dark:text-cobalt-light"
-  },
-  {
-    icon: FileText,
-    value: "01",
-    label: "PUBLISHED PATENT",
-    subtext: "Indian Patent Office No. 202641064539 A",
-    color: "text-acid-lime"
-  },
-  {
-    icon: Cpu,
-    value: "09",
-    label: "BUILT PROJECTS",
-    subtext: "Software & Hardware Architectures",
-    color: "text-cobalt dark:text-cobalt-light"
-  },
-  {
-    icon: Zap,
-    value: "09",
-    label: "OPEN REPOSITORIES",
-    subtext: "Verified Codebases on GitHub",
-    color: "text-cobalt dark:text-cobalt-light"
-  },
-  {
-    icon: GraduationCap,
-    value: "02",
-    label: "INDUSTRY PROGRAMS",
-    subtext: "Infosys Springboard & Samsung AI",
-    color: "text-acid-lime"
-  }
-];
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 export const StatsCounter = () => {
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const totalProjects = PROJECTS.length;
+  const repoCount = PROJECTS.filter(p => Boolean(p.githubUrl)).length;
+
+  const STATS = [
+    {
+      icon: Award,
+      numeric: parseFloat(PERSONAL_INFO.education.cgpa),
+      decimals: 2,
+      displayPrefix: '',
+      displaySuffix: '',
+      label: "ACADEMIC CGPA",
+      subtext: "KPR Institute B.Tech IT",
+      color: "text-cobalt-light"
+    },
+    {
+      icon: Award,
+      numeric: 2,
+      decimals: 0,
+      displayPrefix: '0',
+      displaySuffix: '',
+      label: "AWARDS & HONORS",
+      subtext: "Hostel Hackathon & STEM Expo",
+      color: "text-acid-lime"
+    },
+    {
+      icon: Cpu,
+      numeric: totalProjects,
+      decimals: 0,
+      displayPrefix: totalProjects < 10 ? '0' : '',
+      displaySuffix: '',
+      label: "FLAGSHIP SYSTEMS",
+      subtext: "Software & Applied AI Architectures",
+      color: "text-cobalt-light"
+    },
+    {
+      icon: Zap,
+      numeric: repoCount,
+      decimals: 0,
+      displayPrefix: repoCount < 10 ? '0' : '',
+      displaySuffix: '',
+      label: "OPEN REPOSITORIES",
+      subtext: "Verified Codebases on GitHub",
+      color: "text-cobalt-light"
+    },
+    {
+      icon: GraduationCap,
+      numeric: 1,
+      decimals: 0,
+      displayPrefix: '0',
+      displaySuffix: '',
+      label: "INDUSTRY INTERNSHIP",
+      subtext: "Infosys Springboard AI",
+      color: "text-acid-lime"
+    }
+  ];
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el || checkReducedMotion()) return;
+
+    const ctx = gsap.context(() => {
+      const counters = el.querySelectorAll<HTMLSpanElement>('.stat-counter-val');
+
+      counters.forEach((counter) => {
+        const targetVal = parseFloat(counter.getAttribute('data-target') || '0');
+        const decimals = parseInt(counter.getAttribute('data-decimals') || '0', 10);
+        const prefix = counter.getAttribute('data-prefix') || '';
+        const obj = { val: 0 };
+
+        gsap.to(obj, {
+          val: targetVal,
+          duration: 1.6,
+          ease: 'power4.out',
+          scrollTrigger: {
+            trigger: el,
+            start: 'top 85%',
+            toggleActions: 'play none none none',
+          },
+          onUpdate: () => {
+            if (decimals > 0) {
+              counter.innerText = `${prefix}${obj.val.toFixed(decimals)}`;
+            } else {
+              const intVal = Math.round(obj.val);
+              counter.innerText = `${prefix}${intVal}`;
+            }
+          },
+        });
+      });
+    }, el);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <div className="w-full py-10 px-6 sm:px-12 lg:px-16 border-y border-border-light dark:border-border-dark bg-white/70 dark:bg-[#111319]/80 backdrop-blur-md transition-colors duration-300">
+    <div
+      id="stats"
+      ref={containerRef}
+      className="w-full py-12 px-6 sm:px-12 lg:px-16 border-y border-border-dark bg-[#111319]/80 backdrop-blur-md transition-colors duration-300 relative z-10"
+    >
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8 lg:gap-6 items-center">
           {STATS.map((stat, idx) => {
@@ -52,14 +121,21 @@ export const StatsCounter = () => {
                   idx === STATS.length - 1 ? 'col-span-2 md:col-span-1' : ''
                 }`}
               >
-                <div className="flex items-center gap-2 text-text-dimmed dark:text-text-muted text-xs font-mono">
+                <div className="flex items-center gap-2 text-text-muted text-xs font-mono">
                   <Icon size={14} className={stat.color} />
                   <span className="tracking-wider uppercase">{stat.label}</span>
                 </div>
-                <div className="font-display font-black text-3xl sm:text-4xl text-text-black dark:text-white tracking-tight group-hover:text-cobalt transition-colors">
-                  {stat.value}
+                <div className="font-display font-black text-3xl sm:text-4xl text-white tracking-tight group-hover:text-cobalt-light transition-colors">
+                  <span
+                    className="stat-counter-val"
+                    data-target={stat.numeric}
+                    data-decimals={stat.decimals}
+                    data-prefix={stat.displayPrefix}
+                  >
+                    {stat.displayPrefix}{stat.decimals > 0 ? stat.numeric.toFixed(stat.decimals) : stat.numeric}
+                  </span>
                 </div>
-                <p className="text-[11px] font-sans text-text-muted dark:text-gray-400 font-light truncate">
+                <p className="text-xs font-sans text-gray-400 font-light truncate">
                   {stat.subtext}
                 </p>
               </div>
@@ -70,4 +146,3 @@ export const StatsCounter = () => {
     </div>
   );
 };
-

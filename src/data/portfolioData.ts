@@ -11,10 +11,11 @@ export const PERSONAL_INFO = {
     "Product Builder"
   ],
   location: "Coimbatore, India",
+  statusLine: "Final-year B.Tech IT, 2022-2026",
   education: {
     degree: "B.Tech Information Technology",
     institution: "KPR Institute of Engineering and Technology",
-    year: "Third Year Undergraduate (2024 — 2028)",
+    year: "Final-year B.Tech IT, 2022-2026",
     cgpa: "8.42",
     school: "Senthil Matriculation Higher Secondary School (2022 — 2024)"
   },
@@ -30,8 +31,7 @@ export const PERSONAL_INFO = {
     phone: "+91 7845080379",
     linkedin: "https://www.linkedin.com/in/arjunan-velmurugan-1a446b35a",
     github: "https://github.com/Arjunan-lab",
-    resumeUrl: "/assets/Arjunan_V_Resume.pdf",
-    patentUrl: "/assets/Microscopy_System_Patent_Publication.pdf"
+    resumeUrl: "/assets/Arjunan_V_Resume.pdf"
   },
   availability: "Available for high-impact engineering roles & ambitious product collaborations"
 };
@@ -111,6 +111,7 @@ export const SKILL_CATEGORIES: SkillCategory[] = [
 export const PROJECTS: Project[] = [
   {
     id: "soil-health-ai",
+    tags: ['ai', 'systems'],
     number: "01",
     title: "AI-Based Soil Health Assessment & Crop Recommendation",
     category: "Artificial Intelligence / Deep Learning / Agriculture (Infosys Springboard)",
@@ -118,7 +119,7 @@ export const PROJECTS: Project[] = [
     fullDescription: "An enterprise-grade agricultural intelligence platform engineered during the Infosys Springboard AI internship. Empowers farmers with immediate agronomic guidance by integrating computer vision for soil nutrient deficiency classification (N, P, K, pH), multi-target gradient boosted decision trees for crop yield recommendation, and asynchronous Celery workers backed by Redis for heavy model inference.",
     problemStatement: "Smallholder farmers frequently suffer from delayed, expensive laboratory soil tests. Without immediate scientific soil health metrics and climate-aware recommendations, crop yields decline and soil degradation compounds season after season.",
     technicalApproach: "Engineered an asynchronous FastAPI backend paired with deep learning and ensemble ML models. Deployed an EfficientNetB2 convolutional backbone for soil classification alongside a high-accuracy CatBoost multi-target regressor. Integrated Celery workers backed by Redis for heavy model inference, with Sarvam AI language APIs providing vernacular conversational support.",
-    coverImage: "/assets/projects/agriculture-ai/seedling-preview.png",
+    coverImage: "/assets/projects/agriculture-ai/seedling-preview.webp",
     keyFeatures: [
       "Deep Learning Soil Classification (EfficientNetB2)",
       "Multi-Parameter Crop Recommendation (CatBoost & Scikit-learn)",
@@ -150,25 +151,25 @@ export const PROJECTS: Project[] = [
     visuals: [
       {
         type: "image",
-        src: "/assets/projects/agriculture-ai/seedling-preview.png",
+        src: "/assets/projects/agriculture-ai/seedling-preview.webp",
         caption: "AI Soil Health analysis console and crop recommendation telemetry.",
         label: "Live Interface"
       },
       {
         type: "image",
-        src: "/assets/projects/agriculture-ai/soil-prediction-1.png",
+        src: "/assets/projects/agriculture-ai/soil-prediction-1.webp",
         caption: "Live interactive prediction console assessing nitrogen, phosphorus, and moisture factors.",
         label: "Interactive Telemetry"
       },
       {
         type: "image",
-        src: "/assets/projects/agriculture-ai/soil-prediction-2.png",
+        src: "/assets/projects/agriculture-ai/soil-prediction-2.webp",
         caption: "Multi-parameter agronomic classification output with targeted crop yield recommendations.",
         label: "Output Inference"
       },
       {
         type: "image",
-        src: "/assets/projects/agriculture-ai/soil-model-eval.png",
+        src: "/assets/projects/agriculture-ai/soil-model-eval.webp",
         caption: "Statistical evaluation matrix and performance metrics generated across validation folds.",
         label: "Model Evaluation"
       }
@@ -176,6 +177,7 @@ export const PROJECTS: Project[] = [
   },
   {
     id: "road-safety-ai",
+    tags: ['ai', 'systems'],
     number: "02",
     title: "RoadSoS — AI Emergency Road Safety & Instant Triage Platform",
     category: "Emergency AI Systems / Computer Vision / Real-Time Geolocation",
@@ -183,7 +185,7 @@ export const PROJECTS: Project[] = [
     fullDescription: "A high-urgency road safety intelligence system engineered during the national AI Road Safety Hackathon. Features instant accident triage with Google Gemini AI via Server-Sent Events (SSE) streaming, automated injury severity scoring, live geospatial nearest hospital routing via OpenStreetMap Overpass API, and multi-channel emergency SOS dispatch.",
     problemStatement: "During vehicular accidents, the golden hour is lost to delayed bystander reporting, inaccurate injury assessments, and emergency response teams navigating blindly without hospital trauma capability telemetry.",
     technicalApproach: "Built an ultra-fast FastAPI v3.1 backend utilizing Gemini Multimodal AI for sub-second visual triage with SSE streaming. Integrated Overpass API for real-time bounding-box hospital searches within 10-25km, coupled with a responsive offline/online failover PWA frontend built with React, Vite, and Tailwind CSS.",
-    coverImage: "/assets/projects/road-safety/road-safety-cover.png",
+    coverImage: "/assets/projects/road-safety/road-safety-cover.webp",
     keyFeatures: [
       "Sub-Second Multimodal Accident Triage (Google Gemini AI)",
       "Server-Sent Events (SSE) Lightning Streaming Response Loop",
@@ -214,19 +216,19 @@ export const PROJECTS: Project[] = [
     visuals: [
       {
         type: "image",
-        src: "/assets/projects/road-safety/road-safety-preview.png",
+        src: "/assets/projects/road-safety/road-safety-preview.webp",
         caption: "Live emergency accident triage console with hospital routing.",
         label: "Triage Dashboard"
       },
       {
         type: "image",
-        src: "/assets/projects/road-safety/ui_frame_25.png",
+        src: "/assets/projects/road-safety/ui_frame_25.webp",
         caption: "Overpass API hospital capability telemetry and trauma center proximity map.",
         label: "Geospatial Routing"
       },
       {
         type: "image",
-        src: "/assets/projects/road-safety/ui_frame_75.png",
+        src: "/assets/projects/road-safety/ui_frame_75.webp",
         caption: "Automated emergency dispatch confirmation and triage summary report.",
         label: "Emergency Dispatch"
       }
@@ -234,6 +236,7 @@ export const PROJECTS: Project[] = [
   },
   {
     id: "blood-connect",
+    tags: ['ai', 'fullstack'],
     number: "03",
     title: "BloodConnect Live — SmartDonor AI Emergency Blood Banking",
     category: "Healthcare Technology / Predictive Machine Learning / Real-Time Geospatial",
@@ -241,7 +244,7 @@ export const PROJECTS: Project[] = [
     fullDescription: "An enterprise healthcare coordination network designed to eliminate critical blood shortages during clinical emergencies. Powered by SmartDonor-AI machine learning models (Random Forest and Gradient Boosting) to score donor eligibility, dynamic geospatial radius resolution on interactive Leaflet maps, and an audited multi-role governance workflow connecting donors, hospital wardens, and regional blood banks.",
     problemStatement: "Traditional blood banking relies on fragmented phone trees and unverified donor lists. In critical surgeries and trauma cases, mismatched blood groups or unavailable donors lead to fatal operational delays.",
     technicalApproach: "Architectured a 4-tier system with React 18, Vite, and Tailwind CSS on the frontend, Node.js and Express with JWT authentication on the backend, PostgreSQL managed through Prisma ORM, and Python scikit-learn models for predictive donor eligibility scoring. Dynamic geographic dispatch uses Leaflet OpenStreetMap telemetry.",
-    coverImage: "/assets/projects/blood-connect/blood-connect-cover.jpg",
+    coverImage: "/assets/projects/blood-connect/blood-connect-cover.webp",
     keyFeatures: [
       "SmartDonor-AI Predictive Eligibility Machine Learning Funnel",
       "Live Geospatial Proximity Matching on Leaflet OpenStreetMap",
@@ -272,13 +275,13 @@ export const PROJECTS: Project[] = [
     visuals: [
       {
         type: "image",
-        src: "/assets/projects/blood-connect/blood-connect-preview.png",
+        src: "/assets/projects/blood-connect/blood-connect-preview.webp",
         caption: "Live emergency donor discovery map with geospatial radius tracking.",
         label: "Geospatial Matching"
       },
       {
         type: "image",
-        src: "/assets/projects/blood-connect/blood-connect-banner.png",
+        src: "/assets/projects/blood-connect/blood-connect-banner.webp",
         caption: "4-tier system architecture connecting donors, hospitals, and clinical blood banks.",
         label: "System Architecture"
       }
@@ -286,6 +289,7 @@ export const PROJECTS: Project[] = [
   },
   {
     id: "ecommerce-mern",
+    tags: ['fullstack'],
     number: "04",
     title: "ApexStore — Full-Stack MERN E-Commerce Architecture",
     category: "Full-Stack Web Engineering / Cloud Storage / Payment Infrastructure",
@@ -293,7 +297,7 @@ export const PROJECTS: Project[] = [
     fullDescription: "A production-grade online marketplace architectured with the complete MERN stack. Designed with responsive category discovery (cameras, audio, smartwatches, televisions), real-time cart state synchronization, cloud asset management via Cloudinary, secure JWT authentication with HTTP-only cookies, and a comprehensive warden/admin management suite.",
     problemStatement: "Modern digital retail platforms must handle high concurrency, dynamic product catalog mutations, seamless image optimization, and low-latency cart operations across mobile and desktop devices without performance degradation.",
     technicalApproach: "Engineered a decoupled client-server architecture with React and Tailwind CSS delivering responsive shopping interfaces. Backed by Node.js and Express RESTful controllers with MongoDB Atlas persistence via Mongoose schemas. Product image uploads stream directly to Cloudinary CDN with automatic thumbnail generation.",
-    coverImage: "/assets/projects/ecommerce/ecommerce-cover.png",
+    coverImage: "/assets/projects/ecommerce/ecommerce-cover.webp",
     keyFeatures: [
       "Complete End-to-End MERN Stack Architecture",
       "Dynamic Multi-Category Product Catalog (Cameras, Audio, Watches, TVs)",
@@ -323,7 +327,7 @@ export const PROJECTS: Project[] = [
     visuals: [
       {
         type: "image",
-        src: "/assets/projects/ecommerce/ecommerce-preview.png",
+        src: "/assets/projects/ecommerce/ecommerce-preview.webp",
         caption: "Live e-commerce storefront showcasing electronic categories and product grids.",
         label: "Storefront Interface"
       }
@@ -331,14 +335,15 @@ export const PROJECTS: Project[] = [
   },
   {
     id: "amazon-rag-chatbot",
+    tags: ['ai', 'fullstack'],
     number: "05",
     title: "Amazon Customer Intelligence RAG Chatbot & Analytics",
-    category: "Natural Language Processing / Retrieval-Augmented Generation (Samsung AI)",
-    shortDescription: "A conversational intelligence engine built during Samsung Innovation Campus, vector-indexing 10,000+ real Amazon reviews with SentenceTransformers and LLM synthesis.",
-    fullDescription: "An advanced conversational AI system developed as part of Samsung Innovation Campus Phase III. Completely replaces conventional keyword searches with high-dimensional dense vector embeddings, retrieving the top 5 most contextually relevant Amazon product reviews and synthesizing factual customer satisfaction summaries with zero hallucination.",
+    category: "Natural Language Processing / Retrieval-Augmented Generation",
+    shortDescription: "A conversational intelligence engine vector-indexing 10,000+ real Amazon reviews with SentenceTransformers and LLM synthesis.",
+    fullDescription: "An advanced conversational AI system completely replacing conventional keyword searches with high-dimensional dense vector embeddings, retrieving the top 5 most contextually relevant Amazon product reviews and synthesizing factual customer satisfaction summaries with zero hallucination.",
     problemStatement: "Customers and product managers cannot feasibly read thousands of conflicting product reviews. Generative LLMs without RAG frequently hallucinate specs and fail to capture real customer sentiment trends.",
     technicalApproach: "Vectorized over 10,000 authentic Amazon product reviews using SentenceTransformers. Built an Express.js middleware triggering a Python retrieval-augmented generation pipeline that matches queries via cosine similarity (threshold > 0.82) and synthesizes actionable bulleted answers. Styled in a glassmorphism dark React interface alongside Plotly Dash analytics.",
-    coverImage: "/assets/projects/amazon-rag/amazon-rag-cover.png",
+    coverImage: "/assets/projects/amazon-rag/amazon-rag-cover.webp",
     keyFeatures: [
       "Dense Semantic Vector Search (SentenceTransformers Embeddings)",
       "Retrieval-Augmented Generation (RAG) over 10,000+ Verified Reviews",
@@ -369,7 +374,7 @@ export const PROJECTS: Project[] = [
     visuals: [
       {
         type: "image",
-        src: "/assets/projects/amazon-rag/amazon-rag-preview.png",
+        src: "/assets/projects/amazon-rag/amazon-rag-preview.webp",
         caption: "RAG vector retrieval chat console with live node inspection and regression metrics.",
         label: "RAG Assistant Console"
       }
@@ -377,6 +382,7 @@ export const PROJECTS: Project[] = [
   },
   {
     id: "smart-attendance-system",
+    tags: ['systems', 'fullstack'],
     number: "06",
     title: "SmartAttend — Smart Campus WiFi & Timetable Attendance System",
     category: "Enterprise Campus Systems / Network Security / MERN Architecture",
@@ -384,7 +390,7 @@ export const PROJECTS: Project[] = [
     fullDescription: "A multi-role collegiate attendance platform built with the MERN stack. Combines network-level college WiFi IP/BSSID validation with a dynamic 10-minute automated attendance window post-bell, automatically marking unrecorded students absent while providing teachers with On-Duty (OD) authorization and 7-period daily automated timetable management.",
     problemStatement: "Manual roll-call and paper registers waste 15-20% of instructional classroom time, suffer from proxy attendance, and delay compliance reporting required by academic accreditation boards.",
     technicalApproach: "Implemented Express.js middleware validating client subnet IP and college WiFi BSSID headers. Designed an automated cron service tracking the 7 daily periods, auto-marking absentees after the 10-minute window. Delivered a glassmorphism React interface with 3D cursor-reactive gradient orbs, 24-hr live clock, and circular attendance percentage telemetry.",
-    coverImage: "/assets/projects/smart-attendance/smart-attendance-cover.png",
+    coverImage: "/assets/projects/smart-attendance/smart-attendance-cover.webp",
     keyFeatures: [
       "Network-Level College WiFi BSSID & Subnet IP Geofencing Validation",
       "Dynamic 10-Minute Automated Attendance Window with Auto-Absent Cron",
@@ -414,7 +420,7 @@ export const PROJECTS: Project[] = [
     visuals: [
       {
         type: "image",
-        src: "/assets/projects/smart-attendance/smart-attendance-preview.png",
+        src: "/assets/projects/smart-attendance/smart-attendance-preview.webp",
         caption: "Student portal with live 24-hour clock, WiFi status beacon, and 7-period class matrix.",
         label: "Student Portal"
       }
@@ -422,6 +428,7 @@ export const PROJECTS: Project[] = [
   },
   {
     id: "hostel-booking",
+    tags: ['fullstack'],
     number: "07",
     title: "HostelHub — Automated Hostel Room Allocation & Payment System",
     category: "Web Application Engineering / Database Management / Relational Architecture",
@@ -429,7 +436,7 @@ export const PROJECTS: Project[] = [
     fullDescription: "A comprehensive institutional hostel management platform developed with PHP and MySQL. Replaces manual paper hostel allotment with an interactive student room discovery matrix, real-time vacant bed telemetry across 4 building floors, QR-based UPI payment receipt uploads, and an authorized warden administrative verification queue.",
     problemStatement: "University hostel admissions involve long physical queues, double-booking errors, and untraceable bank transfer receipts, creating immense friction for wardens and students during semester onboarding.",
     technicalApproach: "Architectured normalized relational database schemas with strict foreign key constraints and transactional room state locks. Implemented multi-role session auth separating student and warden portals, with dynamic room occupancy color coding and receipt image upload verification.",
-    coverImage: "/assets/projects/hostel-hub/hostel-booking-cover.png",
+    coverImage: "/assets/projects/hostel-hub/hostel-booking-cover.webp",
     keyFeatures: [
       "Interactive 4-Floor Hostel Room Occupancy & Vacancy Visual Matrix",
       "AC Premium and Non-AC Deluxe Bed Allocation Workflow",
@@ -457,7 +464,7 @@ export const PROJECTS: Project[] = [
     visuals: [
       {
         type: "image",
-        src: "/assets/projects/hostel-hub/hostel-booking-preview.png",
+        src: "/assets/projects/hostel-hub/hostel-booking-preview.webp",
         caption: "Warden admin portal displaying floor occupancy matrix and UPI receipt verification queue.",
         label: "Warden Dashboard"
       }
@@ -465,6 +472,7 @@ export const PROJECTS: Project[] = [
   },
   {
     id: "banking-system",
+    tags: ['systems'],
     number: "08",
     title: "SecureBank Core — Enterprise Java JDBC Banking & Transaction Engine",
     category: "Enterprise Systems / Core Java / Database ACID Concurrency",
@@ -472,7 +480,7 @@ export const PROJECTS: Project[] = [
     fullDescription: "A robust financial transaction and account management engine developed in Core Java using JDBC and MySQL. Demonstrates deep object-oriented architectural patterns, thread-synchronized concurrent balance transfers with zero deadlock risk, SHA-256 cryptographic password hashing, PreparedStatement SQL injection defense, and transaction ledger audit logging.",
     problemStatement: "Financial core systems require absolute zero-tolerance for race conditions, data inconsistencies, and security loopholes during simultaneous fund withdrawals and deposits.",
     technicalApproach: "Implemented custom Java concurrency models with synchronized transaction blocks and database row-level locking (SELECT FOR UPDATE). Structured custom exception hierarchies (InvalidInputException, InsufficientFundsException), persistent ArrayList ledger caches, and connection pooling to MySQL.",
-    coverImage: "/assets/projects/banking/banking-cover.png",
+    coverImage: "/assets/projects/banking/banking-cover.webp",
     keyFeatures: [
       "ACID-Compliant Multi-Threaded Financial Transaction Execution",
       "Thread-Safe Concurrent Account Transfer Engine with Zero Deadlock Risk",
@@ -501,45 +509,11 @@ export const PROJECTS: Project[] = [
     visuals: [
       {
         type: "image",
-        src: "/assets/projects/banking/banking-preview.png",
+        src: "/assets/projects/banking/banking-preview.webp",
         caption: "Real-time JDBC transaction logs, ACID execution telemetry, and account balance ledger.",
         label: "Transaction Engine"
       }
     ]
-  },
-  {
-    id: "microscopy-patent",
-    number: "09",
-    title: "Automated Microscopy System with Precision Fluid & Thermal Control",
-    category: "Hardware-Software Integration / Published Patent / Embedded Systems",
-    shortDescription: "A published patent research project integrating embedded closed-loop temperature regulation, micrometer fluid delivery, and digital specimen telemetry.",
-    fullDescription: "An advanced hardware-software research platform officially published by the Indian Patent Office (Application No. 202641064539 A). Collaborated on the embedded system firmware, sensor telemetry acquisition loop, and real-time software control interface for automated biological microscopy.",
-    problemStatement: "Biological specimen observation requires precise, continuous temperature stability and micrometer fluid delivery. Manual handling introduces thermal shocks, fluid turbulence, and optical distortion during sensitive optical examinations.",
-    technicalApproach: "Engineered a closed-loop embedded telemetry architecture interfacing multi-point precision thermal sensors with proportional heating/cooling elements and stepper-driven micrometer fluid dispensers. Developed the asynchronous software communication driver for real-time monitoring and parameter automation.",
-    coverImage: "/assets/projects/microscopy/microscopy-patent-cover.png",
-    keyFeatures: [
-      "Official Indian Patent Office Published Invention (202641064539 A)",
-      "Closed-Loop Thermal Regulation with Sub-Degree Precision",
-      "Micro-Meter Precision Fluid Dispensing Mechanism",
-      "Real-Time Serial & USB Sensor Telemetry Acquisition Loop",
-      "Digital Optical Microscope Interface & Specimen Telemetry",
-      "Fail-Safe Automated Safety Cutoff Protocols"
-    ],
-    techStack: [
-      "Embedded C / C++",
-      "Microcontroller Firmware",
-      "Thermal Control Loops",
-      "Python Telemetry",
-      "Serial Protocols",
-      "Sensors & Actuators"
-    ],
-    implementationDetails: [
-      "Collaborated on the patent specification, claims architecture, and technical system diagrams.",
-      "Engineered the embedded acquisition loop logging continuous thermal readings and fluid volume steps.",
-      "Verified repeatable thermal equilibrium across prolonged specimen observation cycles.",
-      "Documented in Indian Patent Gazette publication dated 17/10/2026."
-    ],
-    githubUrl: "https://github.com/Arjunan-lab"
   }
 ];
 
@@ -556,35 +530,6 @@ export const MILESTONES: Milestone[] = [
       "Designed and developed the full-stack hostel room booking web application.",
       "Recognized by KPRIET Principal Dr. D. Saravanan and Deputy Warden Dr. A. Balaji."
     ]
-  },
-  {
-    id: "samsung-innovation-campus",
-    period: "Jan 2026 — Mar 2026",
-    year: "2026",
-    title: "Samsung Innovation Campus Certificate (AI)",
-    organization: "Samsung Electronics & ESSCI",
-    type: "Certification",
-    description: "Successfully completed the Artificial Intelligence course of Samsung Innovation Campus (Certificate ID: SIC23477). Received intensive industry training in AI, Machine Learning algorithms, predictive analytics, and big data modeling.",
-    highlights: [
-      "Certified under Samsung Southwest Asia CSR & Corporate Communications (Shubham Mukherjee & Vinod Sharma).",
-      "Completed practical capstone evaluations and industry-aligned technical assessments."
-    ],
-    badge: "/assets/samsung_badge.jpg"
-  },
-  {
-    id: "patent-publication",
-    period: "Published June 2026",
-    year: "2026",
-    title: "Govt. of India Patent Published",
-    organization: "The Patent Office Journal (Govt. of India)",
-    type: "Patent",
-    description: "Co-inventor on published Indian Patent Application (Application No. 202641064539 A, Published 05/06/2026): 'Microscopy system for real-time marine organism detection and water quality monitoring using AI and IoT'. A collaborative research breakthrough combining dedicated IoT sensors with real-time deep learning micro-organism identification.",
-    highlights: [
-      "Patent Application No. 202641064539 A; Journal No. 23/2026.",
-      "Invention combines IoT water telemetry sensors with automated microscopic optical AI classification.",
-      "Co-developed in collaboration with faculty mentor Mr. Aman Tomar and research peers."
-    ],
-    credentialUrl: "/assets/Microscopy_System_Patent_Publication.pdf"
   },
   {
     id: "infosys-internship",

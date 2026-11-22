@@ -1,5 +1,5 @@
 import React from 'react';
-import { X, Download, ShieldCheck, ExternalLink } from 'lucide-react';
+import { X, Download, ShieldCheck } from 'lucide-react';
 
 interface CertificateModalProps {
   isOpen: boolean;
@@ -48,6 +48,10 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
           <img
             src={certificateSrc}
             alt={certificateTitle}
+            width={1200}
+            height={850}
+            loading="lazy"
+            decoding="async"
             className="w-full h-auto object-contain max-h-[68vh]"
           />
         </div>
@@ -58,24 +62,15 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
             OFFICIALLY ACCREDITED TO: <span className="text-white font-bold">ARJUNAN</span>
           </span>
 
+          {/* Action Button */}
           <div className="flex items-center gap-3">
             <a
               href={certificateSrc}
-              download={`${certificateTitle.replace(/\s+/g, '_')}.png`}
-              className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full bg-white text-text-black font-sans text-xs font-bold hover:bg-cobalt hover:text-white transition-colors"
+              download={`${certificateTitle.replace(/\s+/g, '_')}.webp`}
+              className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full bg-white text-text-black font-sans text-xs font-bold hover:bg-cobalt hover:text-white transition-colors cursor-pointer"
             >
               <Download size={13} />
-              <span>Download High-Res (PNG)</span>
-            </a>
-
-            <a
-              href="/assets/Microscopy_System_Patent_Publication.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-full bg-white/10 text-white font-sans text-xs font-semibold hover:bg-white/20 transition-colors border border-white/15"
-            >
-              <span>Patent Gazette PDF</span>
-              <ExternalLink size={12} />
+              <span>Download High-Res (WEBP)</span>
             </a>
           </div>
         </div>

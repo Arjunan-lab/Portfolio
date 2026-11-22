@@ -15,7 +15,7 @@ export default {
         'canvas-dark-elevated': '#14161E',
         'text-black': '#111216',
         'text-dimmed': '#6B6E7B',
-        'text-muted': '#8E929E',
+        'text-muted': '#A3A8B7',
         'border-light': '#E6E6DF',
         'border-dark': '#232632',
         

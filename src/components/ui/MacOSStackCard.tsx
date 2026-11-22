@@ -61,24 +61,28 @@ export const MacOSStackCard: React.FC<MacOSStackCardProps> = ({
           <img
             src={certificateSrc}
             alt={certificateTitle}
+            width={480}
+            height={220}
+            loading="lazy"
+            decoding="async"
             className="w-full h-full object-cover object-top filter contrast-105 group-hover:scale-105 transition-transform duration-700"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none" />
 
           {/* macOS Style Stack Tag on the Certificate */}
-          <div className="absolute top-2.5 left-3 right-3 flex items-center justify-between text-[10px] font-mono font-bold text-white bg-black/60 backdrop-blur-md px-2.5 py-1 rounded-full border border-white/20">
+          <div className="absolute top-2.5 left-3 right-3 flex items-center justify-between text-xs font-mono font-bold text-white bg-black/60 backdrop-blur-md px-2.5 py-1 rounded-full border border-white/20">
             <span className="flex items-center gap-1 text-acid-lime">
-              <Sparkles size={10} /> {badgeLabel}
+              <Sparkles size={11} /> {badgeLabel}
             </span>
             <span className="flex items-center gap-1 text-white/80">
-              <Eye size={10} /> CLICK TO ZOOM
+              <Eye size={11} /> CLICK TO ZOOM
             </span>
           </div>
 
           {/* Certificate Title Badge */}
-          <div className="absolute bottom-2.5 left-3 right-3 flex items-center justify-between text-[11px] font-sans font-semibold text-white">
+          <div className="absolute bottom-2.5 left-3 right-3 flex items-center justify-between text-xs font-sans font-semibold text-white">
             <span className="truncate pr-2">{certificateTitle}</span>
-            <span className="text-[10px] font-mono text-acid-lime bg-black/70 px-2 py-0.5 rounded-full flex-shrink-0">
+            <span className="text-xs font-mono text-acid-lime bg-black/70 px-2 py-0.5 rounded-full flex-shrink-0">
               VERIFIED
             </span>
           </div>
@@ -99,14 +103,14 @@ export const MacOSStackCard: React.FC<MacOSStackCardProps> = ({
             <span className="font-mono text-xs font-bold text-cobalt dark:text-cobalt-light px-2.5 py-0.5 rounded-full bg-cobalt/10">
               {period}
             </span>
-            <span className="font-mono text-[11px] text-text-dimmed dark:text-text-muted">
+            <span className="font-mono text-xs text-text-dimmed dark:text-text-muted">
               {organization}
             </span>
           </div>
 
           {/* macOS Stack Interactive Indicator */}
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-canvas-light dark:bg-white/5 border border-border-light dark:border-white/10 text-[10px] font-mono text-text-muted dark:text-gray-400 group-hover:bg-cobalt group-hover:text-white group-hover:border-cobalt transition-all duration-300">
-            <Layers size={11} className={isHovered ? 'animate-bounce text-acid-lime' : ''} />
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-canvas-light dark:bg-white/5 border border-border-light dark:border-white/10 text-xs font-mono text-text-muted dark:text-gray-400 group-hover:bg-cobalt group-hover:text-white group-hover:border-cobalt transition-all duration-300">
+            <Layers size={12} className={isHovered ? 'animate-bounce text-acid-lime' : ''} />
             <span>{isHovered ? 'STACK EXPANDED' : 'HOVER TO FAN STACK'}</span>
           </div>
         </div>
@@ -122,7 +126,7 @@ export const MacOSStackCard: React.FC<MacOSStackCardProps> = ({
         </p>
 
         {/* Bottom Interactive Action Prompt */}
-        <div className="pt-3 border-t border-border-light dark:border-border-dark flex items-center justify-between text-[11px] font-mono text-text-muted dark:text-gray-400">
+        <div className="pt-3 border-t border-border-light dark:border-border-dark flex items-center justify-between text-xs font-mono text-text-muted dark:text-gray-400">
           <span className="flex items-center gap-1 text-acid-lime font-bold">
             <CheckCircle2 size={12} /> AUTHENTICATED
           </span>

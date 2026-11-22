@@ -1,36 +1,50 @@
-import { useState, useRef } from 'react';
-import { ArrowUpRight, Copy, Check, Mail, Phone, MapPin, Send, Download } from 'lucide-react';
+import { useState, useRef, useEffect } from 'react';
+import { ArrowUpRight, Copy, Check, Mail, Phone, MapPin, Download, EyeOff, Eye } from 'lucide-react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { LinkedinIcon, GithubIcon } from './ui/Icons';
-import { CobaltRibbon3D } from './ui/CobaltRibbon3D';
 import { PERSONAL_INFO } from '../data/portfolioData';
-import { useCornerConvergence } from '../motion/scrollMotion';
+import { ContactForm } from './ContactForm';
+import { ScrollToTopRing } from './ui/ScrollToTopRing';
+import { useLenis } from '../motion/SmoothScrollContext';
+import { checkReducedMotion } from '../motion/tokens';
+
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 export const ContactSection = () => {
   const [copiedEmail, setCopiedEmail] = useState(false);
   const [copiedPhone, setCopiedPhone] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    subject: '',
-    message: ''
-  });
+  const { isReducedMotion, toggleReducedMotion } = useLenis();
 
-  const currentYear = new Date().getFullYear();
+  const currentYear = 2026;
 
   const sectionRef = useRef<HTMLElement | null>(null);
   const headingRef = useRef<HTMLHeadingElement | null>(null);
-  const textRef = useRef<HTMLDivElement | null>(null);
-  const artworkRef = useRef<HTMLDivElement | null>(null);
-  const telemetryRef = useRef<HTMLDivElement | null>(null);
+  const driftLineRef = useRef<HTMLSpanElement | null>(null);
 
-  useCornerConvergence({
-    sectionRef,
-    headingRef,
-    textRef,
-    artworkRef,
-    telemetryRef,
-  });
+  useEffect(() => {
+    const section = sectionRef.current;
+    const driftLine = driftLineRef.current;
+    if (!section || !driftLine || checkReducedMotion()) return;
+
+    const ctx = gsap.context(() => {
+      // Horizontal scrubbed drift on the last headline line
+      gsap.to(driftLine, {
+        x: -45,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: section,
+          start: 'top 80%',
+          end: 'bottom top',
+          scrub: 0.3,
+        },
+      });
+    }, section);
+
+    return () => ctx.revert();
+  }, []);
 
   const handleCopyEmail = () => {
     navigator.clipboard.writeText(PERSONAL_INFO.contact.email);
@@ -44,74 +58,68 @@ export const ContactSection = () => {
     setTimeout(() => setCopiedPhone(false), 2500);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!formData.name || !formData.email || !formData.message) return;
-
-    // Direct mailto dispatch
-    const mailtoSubject = encodeURIComponent(formData.subject || `Inquiry from ${formData.name}`);
-    const mailtoBody = encodeURIComponent(`Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`);
-    window.open(`mailto:${PERSONAL_INFO.contact.email}?subject=${mailtoSubject}&body=${mailtoBody}`, '_blank');
-
-    setSubmitted(true);
-  };
-
   return (
     <footer
       id="contact"
       ref={sectionRef}
-      className="relative pt-24 sm:pt-36 pb-12 px-6 sm:px-12 lg:px-16 border-t border-border-light dark:border-border-dark bg-canvas-light dark:bg-[#0C0D11] transition-colors duration-300 overflow-hidden"
+      className="relative pt-24 sm:pt-36 pb-12 px-6 sm:px-12 lg:px-16 border-t border-border-dark bg-[#0C0D11] text-white transition-colors duration-300 overflow-hidden"
     >
-      <div className="max-w-7xl mx-auto space-y-20">
+      {/* Background ambient lighting */}
+      <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-cobalt/10 rounded-full blur-[180px] pointer-events-none" />
+
+      {/* Screen-reader live region for copy confirmations */}
+      <div aria-live="polite" className="sr-only">
+        {copiedEmail ? 'Email address copied to clipboard.' : copiedPhone ? 'Phone number copied to clipboard.' : ''}
+      </div>
+
+      <div className="max-w-7xl mx-auto space-y-16 relative z-10">
         
-        {/* Contact Section Header & Headline */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
-          
-          {/* Left Column: Massive Headline & Introduction */}
-          <div className="lg:col-span-7 space-y-6">
-            <div className="flex items-center gap-2 text-xs font-mono tracking-widest text-text-dimmed dark:text-text-muted uppercase">
-              <span className="w-2 h-2 rounded-full bg-cobalt inline-block animate-pulse" />
+        {/* Section Header with Giant Outcome Headline */}
+        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 pb-8 border-b border-border-dark">
+          <div className="space-y-4 max-w-2xl">
+            <div className="flex items-center gap-2 text-xs font-mono tracking-widest text-cobalt-light uppercase">
+              <span className="w-2 h-2 rounded-full bg-acid-lime inline-block animate-pulse" />
               <span>07 // DIRECT CONTACT &amp; COLLABORATION</span>
             </div>
 
             <h2
               ref={headingRef}
-              className="font-display font-black text-5xl sm:text-7xl md:text-8xl lg:text-[84px] tracking-tighter leading-[0.92] text-text-black dark:text-white uppercase"
+              className="font-display font-black text-4xl sm:text-6xl lg:text-[76px] tracking-tight text-white leading-[1.02] uppercase"
             >
-              <span className="block">LET'S MAKE</span>
-              <span className="block">SOMETHING</span>
-              <span className="block text-cobalt dark:text-cobalt-light">MEANINGFUL.</span>
+              Let's make{' '}
+              <span className="block">
+                something{' '}
+                <span
+                  ref={driftLineRef}
+                  className="contact-drift-line inline-block font-serif-italic font-normal italic text-cobalt-light tracking-normal text-[1.08em] pr-1 will-change-transform"
+                >
+                  meaningful.
+                </span>
+              </span>
             </h2>
+          </div>
 
-            <div ref={textRef} className="space-y-4">
-              <p className="font-sans text-base sm:text-lg md:text-xl text-text-dimmed dark:text-text-muted font-normal max-w-lg leading-relaxed font-light">
-                Have an ambitious idea, high-impact software engineering role, or research collaboration? Reach out directly.
-              </p>
-              
-              <div className="flex items-center gap-2 text-xs font-mono text-text-dimmed dark:text-text-muted">
-                <span className="w-2 h-2 rounded-full bg-acid-lime animate-pulse" />
-                <span className="text-text-black dark:text-white font-semibold">TYPICAL RESPONSE TIME: WITHIN 24 HOURS</span>
-              </div>
+          <div className="space-y-3 max-w-md">
+            <p className="font-sans text-sm sm:text-base text-text-muted leading-relaxed font-light">
+              Available for full-time software engineering roles, high-impact AI/ML product development, and technical collaboration.
+            </p>
+            <div className="flex items-center gap-2 text-xs font-mono text-acid-lime font-bold">
+              <span className="w-2 h-2 rounded-full bg-acid-lime inline-block" />
+              <span>ACTIVE AVAILABILITY // GUARANTEED 24-HR RESPONSE</span>
             </div>
           </div>
-
-          {/* Right Column: 3D Glossy Cobalt Sculpture */}
-          <div ref={artworkRef} className="lg:col-span-5 flex justify-center items-center relative">
-            <CobaltRibbon3D variant="contact" />
-          </div>
-
         </div>
 
-        {/* Two-Column Grid: Contact Details Cards & Direct Interactive Form */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
+        {/* Main Content Grid: Direct Details on Left, Message Form on Right */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
           
-          {/* Left Column (5 cols): Verified Direct Contact Details Cards */}
-          <div className="lg:col-span-5 space-y-4">
+          {/* Left Column: Direct Contact Points & Telemetry (5 cols) */}
+          <div className="lg:col-span-5 space-y-6">
             
             {/* Direct Email Card */}
-            <div className="p-6 rounded-2xl bg-white dark:bg-[#14161E] border border-border-light dark:border-border-dark shadow-subtle-card space-y-3">
-              <div className="flex items-center justify-between text-xs font-mono text-text-dimmed dark:text-text-muted">
-                <span className="flex items-center gap-2 text-cobalt dark:text-cobalt-light font-bold">
+            <div className="p-6 rounded-2xl bg-[#14161E] border border-border-dark shadow-subtle-card space-y-3">
+              <div className="flex items-center justify-between text-xs font-mono text-text-muted">
+                <span className="flex items-center gap-2 text-cobalt-light font-bold">
                   <Mail size={14} /> DIRECT EMAIL
                 </span>
                 <span className="text-acid-lime font-bold">PRIMARY</span>
@@ -119,14 +127,15 @@ export const ContactSection = () => {
               <div className="flex items-center justify-between gap-2">
                 <a
                   href={`mailto:${PERSONAL_INFO.contact.email}`}
-                  className="font-mono text-sm sm:text-base font-bold text-text-black dark:text-white hover:text-cobalt transition-colors truncate"
+                  className="font-mono text-sm sm:text-base font-bold text-white hover:text-cobalt-light transition-colors truncate"
                 >
                   {PERSONAL_INFO.contact.email}
                 </a>
                 <button
                   type="button"
                   onClick={handleCopyEmail}
-                  className="p-2 rounded-xl bg-canvas-light dark:bg-white/10 text-text-dimmed dark:text-gray-300 hover:text-text-black dark:hover:text-white hover:bg-border-light transition-all cursor-pointer shrink-0"
+                  className="p-2 rounded-xl bg-white/10 text-gray-300 hover:text-white hover:bg-white/20 transition-all cursor-pointer shrink-0"
+                  aria-label="Copy email address to clipboard"
                   title="Copy Email"
                 >
                   {copiedEmail ? <Check size={14} className="text-acid-lime" /> : <Copy size={14} />}
@@ -134,206 +143,135 @@ export const ContactSection = () => {
               </div>
             </div>
 
-            {/* Direct Phone & WhatsApp Card */}
-            <div className="p-6 rounded-2xl bg-white dark:bg-[#14161E] border border-border-light dark:border-border-dark shadow-subtle-card space-y-3">
-              <div className="flex items-center justify-between text-xs font-mono text-text-dimmed dark:text-text-muted">
-                <span className="flex items-center gap-2 text-cobalt dark:text-cobalt-light font-bold">
-                  <Phone size={14} /> PHONE &amp; CALL
+            {/* Direct Phone Card */}
+            <div className="p-6 rounded-2xl bg-[#14161E] border border-border-dark shadow-subtle-card space-y-3">
+              <div className="flex items-center justify-between text-xs font-mono text-text-muted">
+                <span className="flex items-center gap-2 text-cobalt-light font-bold">
+                  <Phone size={14} /> VOICE &amp; WHATSAPP
                 </span>
-                <span className="text-text-muted">AVAILABLE</span>
+                <span className="text-gray-400">TELEPHONY</span>
               </div>
               <div className="flex items-center justify-between gap-2">
                 <a
-                  href={`tel:${PERSONAL_INFO.contact.phone.replace(/\s+/g, '')}`}
-                  className="font-mono text-sm sm:text-base font-bold text-text-black dark:text-white hover:text-cobalt transition-colors"
+                  href={`tel:${PERSONAL_INFO.contact.phone.replace(/[^0-9+]/g, '')}`}
+                  className="font-mono text-sm sm:text-base font-bold text-white hover:text-cobalt-light transition-colors truncate"
                 >
                   {PERSONAL_INFO.contact.phone}
                 </a>
                 <button
                   type="button"
                   onClick={handleCopyPhone}
-                  className="p-2 rounded-xl bg-canvas-light dark:bg-white/10 text-text-dimmed dark:text-gray-300 hover:text-text-black dark:hover:text-white hover:bg-border-light transition-all cursor-pointer shrink-0"
-                  title="Copy Phone Number"
+                  className="p-2 rounded-xl bg-white/10 text-gray-300 hover:text-white hover:bg-white/20 transition-all cursor-pointer shrink-0"
+                  aria-label="Copy phone number to clipboard"
+                  title="Copy Phone"
                 >
                   {copiedPhone ? <Check size={14} className="text-acid-lime" /> : <Copy size={14} />}
                 </button>
               </div>
             </div>
 
-            {/* Location & Status Card */}
-            <div className="p-6 rounded-2xl bg-white dark:bg-[#14161E] border border-border-light dark:border-border-dark shadow-subtle-card space-y-3">
-              <div className="flex items-center justify-between text-xs font-mono text-text-dimmed dark:text-text-muted">
-                <span className="flex items-center gap-2 text-cobalt dark:text-cobalt-light font-bold">
-                  <MapPin size={14} /> BASE LOCATION
+            {/* Location & Timezone Card */}
+            <div className="p-6 rounded-2xl bg-[#14161E] border border-border-dark shadow-subtle-card space-y-3">
+              <div className="flex items-center justify-between text-xs font-mono text-text-muted">
+                <span className="flex items-center gap-2 text-cobalt-light font-bold">
+                  <MapPin size={14} /> LOCATION &amp; TIMEZONE
                 </span>
-                <span className="text-acid-lime font-bold">IST (UTC+5:30)</span>
+                <span className="text-gray-400">UTC +05:30 (IST)</span>
               </div>
-              <p className="font-display font-bold text-sm sm:text-base text-text-black dark:text-white">
-                Coimbatore, Tamil Nadu, India
-              </p>
-              <p className="text-xs font-sans text-text-dimmed dark:text-gray-400 font-light">
-                Available for on-site engineering roles in India and worldwide remote collaboration.
-              </p>
+              <div className="font-mono text-sm sm:text-base text-white font-bold">
+                {PERSONAL_INFO.location}
+              </div>
             </div>
 
-            {/* Quick Action Pills: LinkedIn, GitHub, Resume */}
-            <div className="flex flex-wrap gap-2.5 pt-2">
+            {/* Social Channels Row */}
+            <div className="grid grid-cols-2 gap-4">
               <a
                 href={PERSONAL_INFO.contact.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex-1 inline-flex items-center justify-center gap-1.5 px-4 py-3 rounded-xl border border-border-light dark:border-border-dark bg-white dark:bg-[#14161E] text-text-black dark:text-white font-sans text-xs font-semibold hover:border-cobalt hover:text-cobalt dark:hover:text-cobalt-light transition-colors shadow-sm"
+                className="p-4 rounded-2xl bg-[#14161E] border border-border-dark hover:border-cobalt text-white hover:text-cobalt-light flex items-center justify-center gap-2 text-xs font-sans font-semibold transition-all shadow-subtle-card"
+                aria-label="Visit LinkedIn Profile"
               >
-                <LinkedinIcon className="w-3.5 h-3.5 text-cobalt" />
+                <LinkedinIcon className="w-4 h-4 text-cobalt-light" />
                 <span>LinkedIn</span>
-                <ArrowUpRight size={11} />
+                <ArrowUpRight size={12} />
               </a>
 
               <a
                 href={PERSONAL_INFO.contact.github}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex-1 inline-flex items-center justify-center gap-1.5 px-4 py-3 rounded-xl border border-border-light dark:border-border-dark bg-white dark:bg-[#14161E] text-text-black dark:text-white font-sans text-xs font-semibold hover:border-cobalt hover:text-cobalt dark:hover:text-cobalt-light transition-colors shadow-sm"
+                className="p-4 rounded-2xl bg-[#14161E] border border-border-dark hover:border-cobalt text-white hover:text-cobalt-light flex items-center justify-center gap-2 text-xs font-sans font-semibold transition-all shadow-subtle-card"
+                aria-label="Visit GitHub Profile"
               >
-                <GithubIcon className="w-3.5 h-3.5" />
+                <GithubIcon className="w-4 h-4" />
                 <span>GitHub</span>
-                <ArrowUpRight size={11} />
-              </a>
-
-              <a
-                href={PERSONAL_INFO.contact.resumeUrl}
-                download="Arjunan_V_Resume.pdf"
-                className="flex-1 inline-flex items-center justify-center gap-1.5 px-4 py-3 rounded-xl bg-cobalt hover:bg-cobalt-light text-white font-sans text-xs font-semibold transition-colors shadow-sm"
-              >
-                <Download size={12} />
-                <span>Resume PDF</span>
+                <ArrowUpRight size={12} />
               </a>
             </div>
+
+            {/* Quick Resume Download Banner */}
+            <a
+              href={PERSONAL_INFO.contact.resumeUrl}
+              download
+              className="w-full inline-flex items-center justify-center gap-2 py-4 rounded-2xl bg-white text-text-black text-xs font-sans font-bold hover:bg-cobalt hover:text-white transition-all shadow-subtle-card cursor-pointer"
+            >
+              <Download size={14} />
+              <span>Download Verified Resume (PDF)</span>
+            </a>
 
           </div>
 
-          {/* Right Column (7 cols): Direct Interactive Message Form */}
-          <div className="lg:col-span-7 p-8 sm:p-10 rounded-3xl bg-white dark:bg-[#14161E] border border-border-light dark:border-border-dark shadow-subtle-card space-y-6">
-            <div className="space-y-1 pb-2 border-b border-border-light dark:border-border-dark">
-              <h3 className="font-display font-bold text-xl sm:text-2xl text-text-black dark:text-white">
+          {/* Right Column: Direct Message Form (7 cols) */}
+          <div className="lg:col-span-7 bg-[#14161E] p-8 sm:p-12 rounded-3xl border border-border-dark shadow-subtle-card space-y-6">
+            <div className="space-y-2">
+              <h3 className="font-display font-black text-2xl text-white">
                 Send a Direct Message
               </h3>
-              <p className="text-xs font-mono text-text-dimmed dark:text-text-muted">
-                FILL OUT THE FORM BELOW TO DISPATCH A DIRECT INQUIRY
+              <p className="text-xs font-mono text-text-muted">
+                FILL OUT THE FORM BELOW // PROMPT RESPONSE WITHIN 24 HOURS
               </p>
             </div>
 
-            {submitted ? (
-              <div className="py-12 px-6 rounded-2xl bg-acid-lime/10 border border-acid-lime/30 text-center space-y-4">
-                <div className="w-12 h-12 rounded-full bg-acid-lime/20 flex items-center justify-center mx-auto text-text-black dark:text-acid-lime">
-                  <Check size={22} />
-                </div>
-                <h4 className="font-display font-bold text-xl text-text-black dark:text-white">
-                  Message Dispatched!
-                </h4>
-                <p className="text-xs sm:text-sm font-sans text-text-dimmed dark:text-gray-300 max-w-md mx-auto leading-relaxed">
-                  Thank you for reaching out, <span className="font-semibold text-text-black dark:text-white">{formData.name}</span>! I'll review your note and respond promptly to <span className="font-semibold text-text-black dark:text-white">{formData.email}</span>.
-                </p>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setSubmitted(false);
-                    setFormData({ name: '', email: '', subject: '', message: '' });
-                  }}
-                  className="px-6 py-2.5 rounded-full bg-text-black dark:bg-white text-white dark:text-text-black text-xs font-sans font-semibold hover:bg-cobalt dark:hover:bg-cobalt-light dark:hover:text-white transition-colors cursor-pointer"
-                >
-                  Send Another Message
-                </button>
-              </div>
-            ) : (
-              <form onSubmit={handleSubmit} className="space-y-5">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                  <div className="space-y-1.5">
-                    <label className="text-xs font-mono uppercase tracking-wider text-text-dimmed dark:text-text-muted block">
-                      Your Name *
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      placeholder="e.g. Alex Rivera"
-                      value={formData.name}
-                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      className="w-full px-4 py-3 rounded-xl border border-border-light dark:border-border-dark bg-canvas-light dark:bg-white/5 text-text-black dark:text-white text-sm focus:outline-none focus:border-cobalt transition-colors"
-                    />
-                  </div>
-
-                  <div className="space-y-1.5">
-                    <label className="text-xs font-mono uppercase tracking-wider text-text-dimmed dark:text-text-muted block">
-                      Email Address *
-                    </label>
-                    <input
-                      type="email"
-                      required
-                      placeholder="alex@example.com"
-                      value={formData.email}
-                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      className="w-full px-4 py-3 rounded-xl border border-border-light dark:border-border-dark bg-canvas-light dark:bg-white/5 text-text-black dark:text-white text-sm focus:outline-none focus:border-cobalt transition-colors"
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-1.5">
-                  <label className="text-xs font-mono uppercase tracking-wider text-text-dimmed dark:text-text-muted block">
-                    Subject / Opportunity
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="Full-Time Engineering Role / Project Collaboration / Advisory"
-                    value={formData.subject}
-                    onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
-                    className="w-full px-4 py-3 rounded-xl border border-border-light dark:border-border-dark bg-canvas-light dark:bg-white/5 text-text-black dark:text-white text-sm focus:outline-none focus:border-cobalt transition-colors"
-                  />
-                </div>
-
-                <div className="space-y-1.5">
-                  <label className="text-xs font-mono uppercase tracking-wider text-text-dimmed dark:text-text-muted block">
-                    Message *
-                  </label>
-                  <textarea
-                    rows={4}
-                    required
-                    placeholder="Tell me about your project, team, or opportunity..."
-                    value={formData.message}
-                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                    className="w-full px-4 py-3 rounded-xl border border-border-light dark:border-border-dark bg-canvas-light dark:bg-white/5 text-text-black dark:text-white text-sm focus:outline-none focus:border-cobalt transition-colors resize-none"
-                  />
-                </div>
-
-                <button
-                  type="submit"
-                  className="w-full inline-flex items-center justify-center gap-2 py-3.5 rounded-xl bg-text-black dark:bg-white text-white dark:text-text-black font-sans text-xs font-bold hover:bg-cobalt dark:hover:bg-cobalt-light dark:hover:text-white transition-colors cursor-pointer shadow-sm"
-                >
-                  <Send size={13} />
-                  <span>Send Message Directly</span>
-                </button>
-              </form>
-            )}
-
+            <ContactForm idPrefix="section" />
           </div>
 
         </div>
 
-        {/* Footer Bottom Strip */}
-        <div
-          ref={telemetryRef}
-          className="pt-8 border-t border-border-light dark:border-border-dark flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-sans text-text-dimmed dark:text-text-muted"
-        >
-          <span className="font-display font-bold text-text-black dark:text-white text-sm">
-            ARJUNAN
-          </span>
+        {/* Bottom Credits, A11y Motion Toggle, & Scroll-to-Top Ring */}
+        <div className="pt-10 border-t border-border-dark flex flex-col md:flex-row items-center justify-between gap-6 text-xs font-mono text-text-muted">
+          <div>
+            <span>ARJUNAN — {PERSONAL_INFO.roleTitle}</span>
+          </div>
 
-          <span className="font-sans text-text-muted dark:text-gray-400 italic">
-            Built with curiosity and intention.
-          </span>
+          <div className="flex items-center gap-6">
+            {/* Reduced Motion Toggle Button */}
+            <button
+              onClick={toggleReducedMotion}
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-border-dark hover:border-cobalt text-text-muted hover:text-white transition-colors cursor-pointer"
+              title="Toggle Reduced Motion mode"
+              aria-label={isReducedMotion ? 'Enable smooth animations' : 'Reduce animations and motion'}
+            >
+              {isReducedMotion ? (
+                <>
+                  <Eye size={12} className="text-acid-lime" />
+                  <span>Reduced Motion: ON</span>
+                </>
+              ) : (
+                <>
+                  <EyeOff size={12} className="text-cobalt-light" />
+                  <span>Reduce Motion</span>
+                </>
+              )}
+            </button>
 
-          <span className="font-mono text-text-dimmed dark:text-text-muted">
-            © {currentYear} Arjunan V • All Rights Reserved
-          </span>
+            <span>© {currentYear} All rights reserved. Grounded Systems &amp; Modern AI.</span>
+          </div>
+
+          {/* Smooth Scroll-To-Top Circular Progress Ring */}
+          <div>
+            <ScrollToTopRing />
+          </div>
         </div>
 
       </div>

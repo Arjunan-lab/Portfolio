@@ -63,8 +63,12 @@ export const SoilHealth = () => {
         <div className="rounded-3xl overflow-hidden bg-canvas-dark-elevated border border-white/15 p-4 sm:p-8 shadow-2xl relative">
           <div className="aspect-[16/9] rounded-2xl overflow-hidden bg-black relative">
             <img
-              src="/assets/soil-prediction-1.png"
+              src="/assets/projects/agriculture-ai/soil-prediction-1.webp"
               alt="Soil Health Dashboard Telemetry"
+              width={1280}
+              height={720}
+              loading="lazy"
+              decoding="async"
               className="w-full h-full object-cover object-top"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-canvas-dark via-transparent to-transparent pointer-events-none" />
@@ -151,8 +155,12 @@ export const SoilHealth = () => {
             <div className="rounded-2xl overflow-hidden bg-black border border-white/10 p-2 space-y-2">
               <div className="aspect-[16/10] overflow-hidden rounded-xl bg-surface-black">
                 <img
-                  src="/assets/soil-model-eval.png"
+                  src="/assets/projects/agriculture-ai/soil-model-eval.webp"
                   alt="Model Evaluation Metrics"
+                  width={640}
+                  height={400}
+                  loading="lazy"
+                  decoding="async"
                   className="w-full h-full object-cover object-top"
                 />
               </div>
@@ -164,8 +172,12 @@ export const SoilHealth = () => {
             <div className="rounded-2xl overflow-hidden bg-black border border-white/10 p-2 space-y-2">
               <div className="aspect-[16/10] overflow-hidden rounded-xl bg-surface-black">
                 <img
-                  src="/assets/soil-accuracy.png"
+                  src="/assets/projects/agriculture-ai/soil-accuracy.webp"
                   alt="Accuracy Curves"
+                  width={640}
+                  height={400}
+                  loading="lazy"
+                  decoding="async"
                   className="w-full h-full object-cover object-top"
                 />
               </div>

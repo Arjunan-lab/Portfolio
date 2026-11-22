@@ -150,7 +150,7 @@ export const useCornerConvergence = ({
         trigger: section,
         start: 'bottom 40%',
         end: 'bottom -20%',
-        scrub: 1.2,
+        scrub: 0.3,
         onUpdate: (self) => {
           const progress = self.progress;
           if (headingRef?.current) {
@@ -176,6 +176,7 @@ export const useCornerConvergence = ({
     }, section);
 
     return () => ctx.revert();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 };
 
@@ -257,6 +258,7 @@ export const useMaskTextReveal = <T extends HTMLElement = HTMLDivElement>() => {
     }, el);
 
     return () => ctx.revert();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return ref;

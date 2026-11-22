@@ -2,42 +2,36 @@ import { Link } from 'react-router-dom';
 import { ArrowLeft, Award, GraduationCap, Compass, ArrowRight } from 'lucide-react';
 import { PERSONAL_INFO, PRINCIPLES } from '../data/portfolioData';
 import { CobaltRibbon3D } from '../components/ui/CobaltRibbon3D';
+import { SplitReveal } from '../motion/SplitReveal';
 
 export const AboutPage = () => {
   return (
-    <div className="min-h-screen bg-canvas-light dark:bg-[#0C0D11] text-text-black dark:text-white pt-32 pb-24 px-6 sm:px-12 lg:px-16 selection:bg-cobalt selection:text-white transition-colors duration-300">
+    <div className="min-h-screen bg-[#0C0D11] text-white pt-32 pb-24 px-6 sm:px-12 lg:px-16 selection:bg-cobalt selection:text-white transition-colors duration-300">
       <div className="max-w-6xl mx-auto space-y-20">
         
         {/* Navigation */}
-        <div className="flex items-center justify-between pb-6 border-b border-border-light dark:border-border-dark">
+        <div className="flex items-center justify-between pb-6 border-b border-border-dark">
           <Link
             to="/"
-            className="inline-flex items-center gap-2 text-xs font-mono text-text-dimmed dark:text-text-muted hover:text-text-black dark:hover:text-white transition-colors"
+            className="inline-flex items-center gap-2 text-xs font-mono text-text-muted hover:text-white transition-colors"
           >
             <ArrowLeft size={14} />
             <span>Return to Overview</span>
           </Link>
-          <span className="font-mono text-xs uppercase tracking-widest text-cobalt dark:text-cobalt-light font-bold">
+          <span className="font-mono text-xs uppercase tracking-widest text-cobalt-light font-bold">
             PROFILE // 01
           </span>
         </div>
 
         {/* Header */}
         <div className="space-y-6 max-w-4xl">
-          <span className="font-mono text-xs text-text-dimmed dark:text-text-muted uppercase tracking-widest">
+          <span className="font-mono text-xs text-text-muted uppercase tracking-widest">
             01 — ABOUT ME
           </span>
-          <h1 className="font-display font-black text-4xl sm:text-6xl lg:text-[76px] tracking-tight leading-[1.04]">
-            Curious by nature.{' '}
-            <span className="block">
-              An{' '}
-              <span className="font-serif-italic font-normal italic text-cobalt dark:text-cobalt-light text-[1.08em] pr-1">
-                engineer
-              </span>{' '}
-              by practice.
-            </span>
-          </h1>
-          <p className="font-sans text-lg sm:text-2xl text-text-dimmed dark:text-text-muted leading-relaxed font-light">
+          <SplitReveal as="h1" type="lines" className="font-display font-black text-4xl sm:text-6xl lg:text-[76px] tracking-tight leading-[1.04]">
+            Curious by nature. An engineer by practice.
+          </SplitReveal>
+          <p className="font-sans text-lg sm:text-2xl text-text-muted leading-relaxed font-light">
             I'm an Information Technology undergraduate who enjoys turning ideas into functional digital products. My interests span full-stack engineering, artificial intelligence, and product development.
           </p>
         </div>
@@ -64,19 +58,19 @@ export const AboutPage = () => {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-sm">
                 <div>
-                  <span className="text-[11px] font-mono text-text-muted dark:text-gray-400 uppercase block mb-1">DEGREE</span>
+                  <span className="text-xs font-mono text-text-muted dark:text-gray-400 uppercase block mb-1">DEGREE</span>
                   <p className="font-display font-bold text-text-black dark:text-white text-base">{PERSONAL_INFO.education.degree}</p>
                 </div>
                 <div>
-                  <span className="text-[11px] font-mono text-text-muted dark:text-gray-400 uppercase block mb-1">INSTITUTION</span>
+                  <span className="text-xs font-mono text-text-muted dark:text-gray-400 uppercase block mb-1">INSTITUTION</span>
                   <p className="font-display font-bold text-text-black dark:text-white text-base">{PERSONAL_INFO.education.institution}</p>
                 </div>
                 <div>
-                  <span className="text-[11px] font-mono text-text-muted dark:text-gray-400 uppercase block mb-1">CURRENT YEAR</span>
+                  <span className="text-xs font-mono text-text-muted dark:text-gray-400 uppercase block mb-1">CURRENT YEAR</span>
                   <p className="font-display font-bold text-text-black dark:text-white text-base">{PERSONAL_INFO.education.year}</p>
                 </div>
                 <div>
-                  <span className="text-[11px] font-mono text-text-muted dark:text-gray-400 uppercase block mb-1">LOCATION</span>
+                  <span className="text-xs font-mono text-text-muted dark:text-gray-400 uppercase block mb-1">LOCATION</span>
                   <p className="font-display font-bold text-text-black dark:text-white text-base">{PERSONAL_INFO.location}</p>
                 </div>
               </div>
