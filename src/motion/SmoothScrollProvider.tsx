@@ -22,7 +22,8 @@ export const SmoothScrollProvider: React.FC<{ children: React.ReactNode }> = ({ 
       syncTouch: false,
       autoRaf: true,
     });
-    window.lenis = lenis;
+    // Safely assign global instance for dev/debug inspection without type conflict
+    (window as unknown as { lenis?: unknown }).lenis = lenis;
     return lenis;
   });
 
@@ -42,7 +43,7 @@ export const SmoothScrollProvider: React.FC<{ children: React.ReactNode }> = ({ 
       localStorage.setItem('arjun_reduce_motion', String(next));
       if (next && lenisInstance) {
         lenisInstance.destroy();
-        window.lenis = null;
+        (window as unknown as { lenis?: unknown }).lenis = null;
       }
       return next;
     });
@@ -63,7 +64,7 @@ export const SmoothScrollProvider: React.FC<{ children: React.ReactNode }> = ({ 
     return () => {
       lenisInstance.off('scroll', onScroll);
       lenisInstance.destroy();
-      window.lenis = null;
+      (window as unknown as { lenis?: unknown }).lenis = null;
     };
   }, [lenisInstance, isReducedMotion]);
 

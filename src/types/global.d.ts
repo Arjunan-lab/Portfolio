@@ -1,15 +1,3 @@
-import type Lenis from 'lenis';
-
-declare module 'lenis' {
-  interface Lenis {
-    version?: string;
-    horizontal?: boolean;
-    snap?: boolean;
-    touch?: boolean;
-    velocity?: number;
-  }
-}
-
 declare module 'split-type' {
   export interface SplitTypeOptions {
     types?: string;
@@ -34,13 +22,6 @@ declare module 'split-type' {
 
 declare global {
   interface Window {
-    lenis: (Lenis & {
-      version?: string;
-      horizontal?: boolean;
-      snap?: boolean;
-      touch?: boolean;
-      velocity?: number;
-    }) | null | undefined;
     __LITE_MODE__?: boolean;
     __MOTION_DEBUG__?: boolean;
   }

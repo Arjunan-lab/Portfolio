@@ -45,7 +45,8 @@ export const TechMarquee: React.FC<{ className?: string }> = ({ className = '' }
 
     const tick = () => {
       // Modulate speed by scroll velocity if available
-      const velocity = window.lenis?.velocity ?? 0;
+      const lenisAny = (window as unknown as { lenis?: { velocity?: number } }).lenis;
+      const velocity = typeof lenisAny === 'object' && lenisAny && 'velocity' in lenisAny ? (lenisAny.velocity ?? 0) : 0;
       const speedModifier = 1 + Math.min(Math.abs(velocity) * 0.15, 3.5);
 
       pos1 -= baseSpeed * speedModifier;
