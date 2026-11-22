@@ -519,6 +519,21 @@ export const PROJECTS: Project[] = [
 
 export const MILESTONES: Milestone[] = [
   {
+    id: "samsung-innovation-campus",
+    period: "Jan 2026 — Mar 2026",
+    year: "2026",
+    title: "Samsung Innovation Campus Certificate (AI)",
+    organization: "Samsung Electronics & ESSCI",
+    type: "Certification",
+    description: "Successfully completed the intensive Artificial Intelligence course of Samsung Innovation Campus (Certificate ID: SIC23477). Received comprehensive industry training in AI, Machine Learning algorithms, predictive analytics, deep neural networks, and applied big data modeling.",
+    highlights: [
+      "Certified under Samsung Southwest Asia CSR & Corporate Communications (Shubham Mukherjee & Vinod Sharma).",
+      "Completed practical capstone evaluations, real-world data pipelines, and industry-aligned technical assessments.",
+      "Credential verified with official Certificate ID SIC23477."
+    ],
+    credentialUrl: "/assets/Samsung_Innovation_Campus_Cert.pdf"
+  },
+  {
     id: "hostel-hackathon",
     period: "May 2025",
     year: "2025",

@@ -9,6 +9,12 @@ import { CobaltRibbon3D } from '../components/ui/CobaltRibbon3D';
 import { SplitReveal } from '../motion/SplitReveal';
 
 const CERTIFICATE_MAP: Record<string, { src: string; title: string; badge: string; pdf?: string }> = {
+  'samsung-innovation-campus': {
+    src: '/assets/certificates/samsung_innovation_cert.webp',
+    title: 'Samsung Innovation Campus Artificial Intelligence Certificate (SIC23477)',
+    badge: 'SAMSUNG ELECTRONICS',
+    pdf: '/assets/Samsung_Innovation_Campus_Cert.pdf',
+  },
   'hostel-hackathon': {
     src: '/assets/certificates/hostel_hackathon_cert.webp',
     title: 'H² Hostel Hackathon Certificate of Participation — KPRIET',
@@ -97,6 +103,10 @@ export const ExperiencePage = () => {
               <div className="flex items-center justify-between text-gray-300">
                 <span>ACADEMIC PERFORMANCE</span>
                 <span className="font-bold text-white">CGPA 8.42</span>
+              </div>
+              <div className="flex items-center justify-between text-gray-300">
+                <span>GLOBAL PROGRAM</span>
+                <span className="font-bold text-cobalt-light">SAMSUNG INNOVATION CAMPUS</span>
               </div>
               <div className="flex items-center justify-between text-gray-300">
                 <span>INDUSTRY INTERNSHIP</span>

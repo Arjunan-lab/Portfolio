@@ -57,12 +57,12 @@ export const StatsCounter = () => {
     },
     {
       icon: GraduationCap,
-      numeric: 1,
+      numeric: 2,
       decimals: 0,
       displayPrefix: '0',
       displaySuffix: '',
-      label: "INDUSTRY INTERNSHIP",
-      subtext: "Infosys Springboard AI",
+      label: "INDUSTRY PROGRAMS",
+      subtext: "Infosys Springboard & Samsung AI",
       color: "text-acid-lime"
     }
   ];
