@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, Download, Layers } from 'lucide-react';
+import { ArrowLeft, Download } from 'lucide-react';
 import { MILESTONES, PERSONAL_INFO } from '../data/portfolioData';
 import { MacOSStackCard } from '../components/ui/MacOSStackCard';
 import { CertificateModal } from '../components/ui/CertificateModal';
@@ -84,11 +84,6 @@ export const ExperiencePage = () => {
             <p className="font-sans text-lg sm:text-2xl text-text-muted leading-relaxed font-light">
               A comprehensive record of academic rigor, corporate technical programs, competitive hackathons, and published intellectual property.
             </p>
-
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cobalt/10 border border-cobalt/20 text-xs font-mono text-cobalt-light font-bold">
-              <Layers size={14} className="text-acid-lime animate-bounce" />
-              <span>INTERACTIVE MACOS STACK UI: HOVER OVER ANY CARD TO REVEAL OFFICIAL CERTIFICATE</span>
-            </div>
           </div>
 
           {/* Unique 3D Double Helix Sculpture for Journey & Achievements */}
@@ -112,17 +107,6 @@ export const ExperiencePage = () => {
               </h2>
               <p className="font-sans text-sm sm:text-base text-gray-300 leading-relaxed font-light">
                 A verified record of academic rigor, corporate technical programs, competitive hackathons, and published intellectual property.
-              </p>
-            </div>
-
-            {/* macOS Stack Callout */}
-            <div className="p-5 rounded-2xl bg-[#14161E] border border-border-dark space-y-3 shadow-subtle-card">
-              <div className="flex items-center gap-2 text-xs font-mono text-cobalt-light font-bold">
-                <Layers size={14} className="text-acid-lime animate-bounce" />
-                <span>MACOS DOCK STACK UI</span>
-              </div>
-              <p className="text-xs font-sans text-gray-300 font-light leading-relaxed">
-                Hover over any milestone card on the right to fan out the official certificate stacked behind it. Click to zoom in high resolution.
               </p>
             </div>
 

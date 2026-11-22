@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { FileText, ExternalLink, ArrowRight, Layers } from 'lucide-react';
+import { FileText, ExternalLink, ArrowRight } from 'lucide-react';
 import { MILESTONES } from '../data/portfolioData';
 import { MacOSStackCard } from './ui/MacOSStackCard';
 import { CertificateModal } from './ui/CertificateModal';
@@ -102,17 +102,6 @@ export const JourneyTimeline = () => {
               <p className="font-sans text-base sm:text-lg text-gray-300 font-light max-w-md leading-relaxed">
                 Continuous academic rigor, competitive innovation, and corporate research programs.
               </p>
-
-              {/* macOS Stack Instructional Callout */}
-              <div className="p-5 rounded-2xl bg-[#14161E] border border-border-dark space-y-2 shadow-subtle-card">
-                <div className="flex items-center gap-2 text-xs font-mono text-cobalt-light font-bold">
-                  <Layers size={14} className="text-acid-lime animate-bounce" />
-                  <span>MACOS INTERACTIVE DOCK STACK UI</span>
-                </div>
-                <p className="text-xs font-sans text-gray-300 font-light leading-relaxed">
-                  Hover over any milestone card on the right to fan out the official certificate stacked behind it. Click to zoom in high resolution.
-                </p>
-              </div>
 
               {/* Quick Metrics & Achievements Telemetry */}
               <div className="p-5 rounded-2xl bg-[#14161E] border border-border-dark space-y-2.5 text-xs font-mono shadow-subtle-card">
