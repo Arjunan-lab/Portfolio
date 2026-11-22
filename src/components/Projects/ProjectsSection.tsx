@@ -2,11 +2,15 @@ import { useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { 
   ArrowRight, 
-  ExternalLink 
+  ExternalLink,
+  Layers,
+  ArrowUpRight
 } from 'lucide-react';
 import { GithubIcon } from '../ui/Icons';
 import { PROJECTS } from '../../data/portfolioData';
 import { useCornerConvergence } from '../../motion/scrollMotion';
+import { ProjectModal } from './ProjectModal';
+import type { Project } from '../../types';
 
 const FILTER_TABS = [
   'All Projects',
@@ -17,6 +21,7 @@ const FILTER_TABS = [
 
 export const ProjectsSection = () => {
   const [filterTab, setFilterTab] = useState<typeof FILTER_TABS[number]>('All Projects');
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
   const sectionRef = useRef<HTMLElement | null>(null);
   const headingRef = useRef<HTMLDivElement | null>(null);
@@ -180,17 +185,28 @@ export const ProjectsSection = () => {
                         )}
                       </div>
 
-                      {/* Direct Repository Link */}
-                      <div className="pt-3 border-t border-border-dark">
+                      {/* Action Buttons: Detailed View + GitHub Link */}
+                      <div className="pt-3 border-t border-border-dark space-y-2">
+                        {/* Primary Detailed View Button */}
+                        <button
+                          onClick={() => setSelectedProject(project)}
+                          className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-cobalt hover:bg-cobalt-light text-white text-xs font-semibold transition-all shadow-md cursor-pointer"
+                        >
+                          <Layers size={13} />
+                          <span>Detailed Project View</span>
+                          <ArrowUpRight size={13} />
+                        </button>
+
+                        {/* GitHub Repository Link */}
                         <a
                           href={project.githubUrl || "https://github.com/Arjunan-lab"}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-border-dark bg-white/5 text-white text-xs font-semibold hover:border-cobalt hover:text-cobalt-light hover:bg-cobalt/10 transition-all shadow-sm"
+                          className="w-full inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl border border-border-dark bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white text-xs font-mono transition-all"
                         >
                           <GithubIcon className="w-3.5 h-3.5" />
                           <span>View Repository on GitHub</span>
-                          <ExternalLink size={12} />
+                          <ExternalLink size={11} />
                         </a>
                       </div>
                     </div>
@@ -222,6 +238,13 @@ export const ProjectsSection = () => {
         </div>
 
       </div>
+
+      {/* Comprehensive Detailed Project View Modal */}
+      <ProjectModal
+        isOpen={Boolean(selectedProject)}
+        onClose={() => setSelectedProject(null)}
+        project={selectedProject}
+      />
     </section>
   );
 };
