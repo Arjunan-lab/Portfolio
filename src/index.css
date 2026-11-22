@@ -17,29 +17,25 @@
   }
 
   body {
-    background-color: #F7F7F4;
-    color: #111216;
+    background-color: #0C0D11;
+    color: #FFFFFF;
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
     overflow-x: hidden;
   }
 
-  /* Minimal clean scrollbar */
+  /* Global Invisible Scrollbar (Scroll remains 100% active and smooth) */
+  /* Chrome, Safari, Edge, Opera */
   ::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
+    display: none !important;
+    width: 0px !important;
+    height: 0px !important;
+    background: transparent !important;
   }
 
-  ::-webkit-scrollbar-track {
-    background: #F7F7F4;
-  }
-
-  ::-webkit-scrollbar-thumb {
-    background: #D8D8D0;
-    border-radius: 9999px;
-  }
-
-  ::-webkit-scrollbar-thumb:hover {
-    background: #2B59FF;
+  /* Firefox & IE/legacy Edge */
+  * {
+    -ms-overflow-style: none !important;  /* IE and Edge */
+    scrollbar-width: none !important;  /* Firefox */
   }
 }
 
@@ -59,6 +55,15 @@
 
   .text-cobalt-glow {
     text-shadow: 0 0 25px rgba(43, 89, 255, 0.4);
+  }
+
+  /* Utility class to hide scrollbars on specific containers */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
   }
 }
 

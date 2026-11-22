@@ -17,13 +17,23 @@ export const ProjectModal = ({ isOpen, onClose, project }: ProjectModalProps) =>
 
     if (isOpen) {
       document.body.style.overflow = 'hidden';
+      // Pause Lenis so nested modal wheel events work flawlessly
+      if ((window as any).lenis) {
+        (window as any).lenis.stop();
+      }
       window.addEventListener('keydown', handleKeyDown);
     } else {
       document.body.style.overflow = '';
+      if ((window as any).lenis) {
+        (window as any).lenis.start();
+      }
     }
 
     return () => {
       document.body.style.overflow = '';
+      if ((window as any).lenis) {
+        (window as any).lenis.start();
+      }
       window.removeEventListener('keydown', handleKeyDown);
     };
   }, [isOpen, onClose]);
@@ -31,19 +41,27 @@ export const ProjectModal = ({ isOpen, onClose, project }: ProjectModalProps) =>
   if (!isOpen || !project) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 lg:p-10 bg-black/85 backdrop-blur-xl overflow-y-auto animate-fadeIn">
+    <div 
+      className="fixed inset-0 z-50 overflow-y-auto bg-black/85 backdrop-blur-xl p-4 sm:p-6 lg:p-10 flex justify-center items-start animate-fadeIn no-scrollbar"
+      data-lenis-prevent="true"
+    >
       {/* Backdrop click to dismiss */}
-      <div className="fixed inset-0" onClick={onClose} />
+      <div 
+        className="fixed inset-0 bg-transparent cursor-pointer" 
+        onClick={onClose} 
+        aria-label="Close modal backdrop"
+      />
 
       <div 
-        className="relative z-10 max-w-5xl w-full bg-[#111216] border border-border-dark rounded-3xl p-6 sm:p-10 lg:p-12 shadow-2xl my-auto space-y-8 max-h-[90vh] overflow-y-auto text-white"
+        className="relative z-10 max-w-5xl w-full bg-[#111216] border border-border-dark rounded-3xl p-6 sm:p-10 lg:p-12 shadow-2xl my-8 sm:my-12 space-y-8 text-white transition-all duration-300"
         onClick={(e) => e.stopPropagation()}
+        data-lenis-prevent="true"
       >
         
         {/* Modal Header */}
         <div className="flex items-center justify-between pb-6 border-b border-border-dark">
           <div className="flex items-center gap-3">
-            <span className="font-mono text-sm font-bold text-acid-lime px-3 py-1 rounded-full bg-acid-lime/10 border border-acid-lime/30">
+            <span className="font-mono text-sm font-bold text-acid-lime px-3.5 py-1 rounded-full bg-acid-lime/10 border border-acid-lime/30">
               SYSTEM {project.number}
             </span>
             <span className="font-mono text-xs uppercase tracking-widest text-cobalt-light hidden sm:inline-block">
@@ -53,7 +71,7 @@ export const ProjectModal = ({ isOpen, onClose, project }: ProjectModalProps) =>
 
           <button
             onClick={onClose}
-            className="p-2.5 rounded-full bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white transition-all cursor-pointer"
+            className="p-2.5 rounded-full bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white transition-all cursor-pointer border border-white/5"
             aria-label="Close modal"
           >
             <X size={20} />
@@ -77,7 +95,7 @@ export const ProjectModal = ({ isOpen, onClose, project }: ProjectModalProps) =>
               href={project.githubUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-cobalt hover:bg-cobalt-light text-white font-mono text-xs font-bold uppercase tracking-wider transition-all shadow-cobalt-glow"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-cobalt hover:bg-cobalt-light text-white font-mono text-xs font-bold uppercase tracking-wider transition-all shadow-cobalt-glow cursor-pointer"
             >
               <GithubIcon className="w-4 h-4" />
               <span>Explore GitHub Repository</span>
@@ -109,7 +127,7 @@ export const ProjectModal = ({ isOpen, onClose, project }: ProjectModalProps) =>
           </div>
         </div>
 
-        {/* Key Features */}
+        {/* Key Features & Architecture */}
         <div className="space-y-4 pt-4 border-t border-border-dark">
           <h3 className="font-mono text-xs uppercase tracking-widest text-cobalt-light flex items-center gap-2 font-bold">
             <Cpu size={14} />
@@ -161,7 +179,7 @@ export const ProjectModal = ({ isOpen, onClose, project }: ProjectModalProps) =>
             {project.techStack.map((tech) => (
               <span
                 key={tech}
-                className="text-xs font-mono px-3 py-1.5 rounded-full bg-[#14161E] border border-border-dark text-gray-200"
+                className="text-xs font-mono px-3.5 py-1.5 rounded-full bg-[#14161E] border border-border-dark text-gray-200"
               >
                 {tech}
               </span>
